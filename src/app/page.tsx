@@ -1,18 +1,96 @@
 import Image from 'next/image'
-import Navbar from '@/components/Navbar'
+import Link from 'next/link'
+import BenefitCard from '@/components/BenefitCard'
+
+const benefits = [
+  {
+    gambar:"/images/mingcute_baby-fill.png",
+    benefit: "Deteksi Risiko Stunting Dini",
+  }, 
+  {
+    gambar:"/images/ion_nutrition.png",
+    benefit: "Pemantauan Asupan Gizi Anak",
+  }, 
+  {
+    gambar:"/images/solid_user-doctor.png",
+    benefit: "Konsultasi Dokter Spesialis Anak",
+  }, 
+]
+
+const listFitur = [
+  {
+    id:1, fitur:"G-NutriLog"
+  },
+  {
+    id:2, fitur:"G-Growth Tracker"
+  },
+  {
+    id:3, fitur:"G-EduHub"
+  },
+  {
+    id:4, fitur:"G-Connect"
+  }
+]
 
 export default function Home() {
   return (
-    <div className="relative w-full min-h-screen">
-      <Image
-        src="/images/Rectangle1.png" alt="homeBackground"
-        fill 
-        className="object-cover [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_70%, transparent_100%)]"
-        priority
-        />
-        <div className="absolute inset-0 justify-center px-[80px] py-[70px]">
-          
+    <main>
+      <section className="w-full">
+        <div className="relative w-[1301px] h-[724px]">
+          <Image 
+          src="/images/CardStartPage.png" alt="cardBackground"
+          width={1301}
+          height={724}
+          className="mx-26 my-16 scale-105"
+          />
+          <div className="absolute inset-0 flex items-center px-[60px]">
+            <div className="px-24 w-[850px]">
+              <h1 className="font-bold text-6xl text-[var(--greenLightPrimary)] pb-12 leading-snug">Geazy - Pantau Gizi Jadi Easy</h1>
+              <p className="text-[24px] pb-12">Platform website untuk membantu orang tua memantau pertumbuhan dan status gizi anak secara mandiri, akurat, dan efisien</p>
+              <button className="border-none w-81 h-15 rounded-xl bg-[#1F3A58] px-10 py-2 text-white"><Link href="/">Coba Sekarang</Link></button>
+            </div>
+          </div>
         </div>
-    </div>
+      </section>
+
+      <section>
+        <h1 className="mt-48 mb-16 text-white font-bold text-7xl text-shadow-lg text-center">Benefit</h1>
+        <div className="flex gap-8 justify-center">
+          {benefits.map((benefit) => (
+            <BenefitCard 
+              key={benefit.benefit}
+              gambar={benefit.gambar}
+              benefit={benefit.benefit}
+              />
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-transparent">
+        <h1 className="mt-30 font-bold text-7xl text-[#43BA9C] text-shadow-lg text-center">Fitur Kami</h1>
+        <div className="relative w-full h-[300px] overflow-hidden">
+          <div className="absolute inset-0 flex flex-row gap-4 justify-center items-center px-16">
+            {listFitur.map((fitur) => (
+              <div key={fitur.id} className="relative bg-transparent border-none rounded-2xl p-6 w-[307px] h-[150px] flex overflow-hidden items-center justify-center shadow-xl">
+                <Image 
+            src="/images/Rectangle1.png" alt="cardbg"
+            fill
+            className="object-cover h-[200px]"
+          />
+                <h2 className="relative z-10 font-semibold text-3xl text-center text-[var(--background)]">{fitur.fitur}</h2>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="flex justify-between items-center p-20">
+        <img src="/images/Rectangle19.png" alt="Gambar Anak" className="w-[632px] h-[578px] rounded-2xl"></img>
+        <div className="w-[632px] h-[261px]">
+          <h2 className="font-bold text-6xl text-[var(--greenLightPrimary)] py-8">Tentang Kami</h2>
+          <p className="text-2xl">Geazy adalah platform monitoring gizi digital berbasis website yang dirancang untuk membantu orang tua melakukan pemantauan pertumbuhan anak secara mandiri, akurat, dan efisien.</p>
+        </div>
+      </section>
+    </main>
   )
 }
