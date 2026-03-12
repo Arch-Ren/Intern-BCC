@@ -10,7 +10,7 @@ export default function Navbar() {
                 <li><Link href="/" className="no-underline hover:underline">Home</Link></li>
                 <li><Link href="/about" className="no-underline hover:underline">About</Link></li>
                 <li><Link href="/contact" className="no-underline hover:underline">Contact</Link></li>
-                <button className="border-none bg-[#1F3A58] w-[195px] h-[79px] rounded-4xl px-6 py-4"><Link href="/">Log In</Link></button>
+                <button className="border-none bg-[#1F3A58] w-[195px] h-[79px] rounded-4xl px-6 py-4"><Link href="/login">Log In</Link></button>
             </ul>
         </nav>
     )

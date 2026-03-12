@@ -44,8 +44,10 @@ export default function RootLayout({
           <header className="relative z-10 py-21">
             <Navbar />
             {children}
-            <Footer />
           </header>
+          <footer>
+            <Footer />
+          </footer>
         </div>
       </body>
     </html>
