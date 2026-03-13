@@ -7,19 +7,19 @@ export default function Footer() {
         <div className="overflow-x-hidden">
             <div className="relative h-[450px]">
                 <Image 
-                src="/images/Rectangle1.png" alt="Background"
+                src="/images/Rectangle1.webp" alt="Background"
                 fill
                 className="object-cover"
                 priority />
                 <div className="relative z-10 text-white text-base ml-20 mr-16">
                     <div className="py-12 flex justify-between items-center gap-16">
                         <div>
-                            <img src="/images/WhiteLogo.png" className="mb-8"></img>
+                            <img src="/images/WhiteLogo.webp" className="mb-8"></img>
                             <p className="w-[307px] pb-8">Platform website untuk memantau pertumbuhan dan status gizi anak secara mandiri, akurat, dan efisien.</p>
                             <div className="flex gap-4">
-                                <img src="images/facebook.png" alt="facebook"/>
-                                <img src="images/twitter.png" alt="twitter"/>
-                                <img src="images/instagram.png" alt="instagram"/>
+                                <img src="images/facebook.webp" alt="facebook"/>
+                                <img src="images/twitter.webp" alt="twitter"/>
+                                <img src="images/instagram.webp" alt="instagram"/>
                             </div>
                         </div>
                         <div>
@@ -39,15 +39,15 @@ export default function Footer() {
                         <div>
                             <div className="text-2xl font-bold m-6">Contact Us</div>
                             <div className="flex m-2 gap-2 items-center">
-                                <img src="/images/location-pic.png" alt="location" className="h-fit"/>
+                                <img src="/images/location-pic.webp" alt="location" className="h-fit"/>
                                     <h3 className="max-w-[220px] leading-snug">Jl. Kesehatan No. 10, Malang, Indonesia</h3>
                             </div>
                             <div className="flex m-2 gap-2 items-center">
-                                <img src="/images/mail-pic.png" alt="location"/>
+                                <img src="/images/mail-pic.webp" alt="location"/>
                                 <h3>support @geazy.id</h3>
                             </div>
                             <div className="flex m-2 gap-2 items-center">
-                                <img src="/images/telephone-pic.png" alt="telephone"/>
+                                <img src="/images/telephone-pic.webp" alt="telephone"/>
                                 <h3>+62 812-3456-7890</h3>
                             </div>
                         </div>

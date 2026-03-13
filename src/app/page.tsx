@@ -6,15 +6,15 @@ import Footer from "@/components/Footer";
 
 const benefits = [
   {
-    gambar:"/images/mingcute_baby-fill.png",
+    gambar:"/images/mingcute_baby-fill.webp",
     benefit: "Deteksi Risiko Stunting Dini",
   }, 
   {
-    gambar:"/images/ion_nutrition.png",
+    gambar:"/images/ion_nutrition.webp",
     benefit: "Pemantauan Asupan Gizi Anak",
   }, 
   {
-    gambar:"/images/solid_user-doctor.png",
+    gambar:"/images/solid_user-doctor.webp",
     benefit: "Konsultasi Dokter Spesialis Anak",
   }, 
 ]
@@ -40,7 +40,7 @@ export default function Home() {
       
       <div className="absolute top-0 left-0 w-full h-[1440px] -z-10">
         <Image 
-        src="/images/Rectangle1.png" alt="Background"
+        src="/images/Rectangle1.webp" alt="Background"
         fill
         className="object-cover"
         priority />
@@ -54,7 +54,7 @@ export default function Home() {
         <section className="w-full">
           <div className="relative w-[1301px] h-[724px]">
             <Image 
-            src="/images/CardStartPage.png" alt="cardBackground"
+            src="/images/CardStartPage.webp" alt="cardBackground"
             width={1301}
             height={724}
             className="mx-26 my-16 scale-105"
@@ -65,9 +65,7 @@ export default function Home() {
                 <p className="text-[24px] pb-12">Platform website untuk membantu orang tua memantau pertumbuhan dan status gizi anak secara mandiri, akurat, dan efisien</p>
                 <Link href="/login"
                 className="
-                border-none flex w-[330px] h-[61px] rounded-xl bg-[#1F3A58] px-10 py-2 text-white justify-center items-center text-xl
-                hover:bg-[#0C7D8F] 
-                active:bg-[#486C93] active:scale-95 active:shadow-lg">Coba Sekarang</Link>
+                border-none flex w-[330px] h-[61px] rounded-xl bg-[#1F3A58] px-10 py-2 text-white justify-center items-center text-xl hover:bg-[#0C7D8F] active:bg-[#486C93] active:scale-95 active:shadow-lg">Coba Sekarang</Link>
               </div>
             </div>
           </div>
@@ -93,7 +91,7 @@ export default function Home() {
               {listFitur.map((fitur) => (
                 <div key={fitur.id} className="relative bg-transparent border-none rounded-2xl p-6 w-[307px] h-[150px] flex overflow-hidden items-center justify-center shadow-xl">
                   <Image 
-                  src="/images/Rectangle1.png" alt="cardbg"
+                  src="/images/Rectangle1.webp" alt="cardbg"
                   fill
                   className="object-cover h-[200px]"
                   />
@@ -105,7 +103,7 @@ export default function Home() {
         </section>
             
         <section className="flex justify-between items-center p-20">
-          <img src="/images/Rectangle19.png" alt="Gambar Anak" className="w-[632px] h-[578px] rounded-2xl"></img>
+          <img src="/images/Rectangle19.webp" alt="Gambar Anak" className="w-[632px] h-[578px] rounded-2xl"></img>
           <div className="w-[632px] h-[261px]">
             <h2 className="font-bold text-6xl text-[var(--greenLightPrimary)] py-8">Tentang Kami</h2>
             <p className="text-2xl">Geazy adalah platform monitoring gizi digital berbasis website yang dirancang untuk membantu orang tua melakukan pemantauan pertumbuhan anak secara mandiri, akurat, dan efisien.</p>
