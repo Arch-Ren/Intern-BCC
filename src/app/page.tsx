@@ -46,7 +46,7 @@ export default function Home() {
         priority />
       </div>
 
-      <div className="relative z-10">
+      <div className="z-10">
         <header className="py-21">
           <Navbar />
         </header>
@@ -63,7 +63,11 @@ export default function Home() {
               <div className="px-24 w-[850px]">
                 <h1 className="font-bold text-6xl text-[var(--greenLightPrimary)] pb-12 leading-snug">Geazy - Pantau Gizi Jadi Easy</h1>
                 <p className="text-[24px] pb-12">Platform website untuk membantu orang tua memantau pertumbuhan dan status gizi anak secara mandiri, akurat, dan efisien</p>
-                <button className="border-none w-81 h-15 rounded-xl bg-[#1F3A58] px-10 py-2 text-white"><Link href="/">Coba Sekarang</Link></button>
+                <Link href="/login"
+                className="
+                border-none flex w-[330px] h-[61px] rounded-xl bg-[#1F3A58] px-10 py-2 text-white justify-center items-center text-xl
+                hover:bg-[#0C7D8F] 
+                active:bg-[#486C93] active:scale-95 active:shadow-lg">Coba Sekarang</Link>
               </div>
             </div>
           </div>
