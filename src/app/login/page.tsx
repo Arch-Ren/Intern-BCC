@@ -1,7 +1,7 @@
 'use client'
 
-import { ImageOptimizerCache } from "next/dist/server/image-optimizer"
 import Image from "next/image"
+import Link from "next/link"
 
 export default function Login() {
     return(
@@ -20,8 +20,8 @@ export default function Login() {
                 height={886}
                 />
                 
-                <div className="flex flex-col items-center justify-center w-[650px] gap-6">
-                    <h1 className="text-white text-5xl font-bold">Sign In</h1>
+                <div className="flex flex-col items-center justify-center w-[650px] gap-4">
+                    <h1 className="text-white text-5xl font-bold mb-12">Sign In</h1>
                     <div>
                         <div className="rounded-[20px] bg-white w-[571px] h-[80px] mb-4 flex items-center p-4">
                             <input type="email" placeholder="Email"/>
@@ -48,7 +48,7 @@ export default function Login() {
 
                     <div className="w-[571px] flex justify-center mb-8 text-white gap-2">
                         <p>Don't Have An Account? </p>
-                        <button className="text-right font-bold hover:underline"> Sign Up</button>
+                        <button className="text-right font-bold hover:underline"><Link href="/signup">Sign Up</Link></button>
                     </div>
                 </div>
             </section>
