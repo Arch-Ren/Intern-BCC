@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Poppins } from "next/font/google";
-import Navbar from '@/components/Navbar';
-import Image from 'next/image';
-import Footer from "@/components/Footer";
 
 const poppins = Poppins ({
   weight: '400',
@@ -33,26 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className = { poppins.className}>
-      <body className="overflow-x-hidden">
-        <div className="relative w-[1550px] h-[1440px]">
-          <Image 
-          src="/images/Rectangle1.png" alt="Background"
-          fill
-          className="object-cover"
-          priority />
-
-          <header className="relative z-10 py-21">
-            <Navbar />
-            {children}
-          </header>
-          <footer>
-            <Footer />
-          </footer>
-        </div>
+      <body>
+        {children}
       </body>
     </html>
   );
 }
-
-/* [mask-image:linear-gradient(to_bottom,black_20%,transparent_80%)] [-webkit-mask-image:linear-gradient(to_bottom,black_20%,transparent_80%)]
- */
