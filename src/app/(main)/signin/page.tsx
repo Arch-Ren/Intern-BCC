@@ -29,8 +29,8 @@ export default function SignIn() {
     return(
             <main className="p-12 w-full flex justify-center">
             
-                <div className="w-full max-w-[1440px] rounded-3xl bg-[url('/images/Rectangle1.webp')] bg-cover bg-center">
-                    <section className="relative z-10 flex justify-between">
+                <div className="w-full max-w-[1440px] rounded-3xl bg-primary bg-cover bg-center">
+                    <section className="relative z-10 flex justify-between items-center p-[19px]">
                         <Image
                         src="/images/signin-pic.webp" alt="gambar sign-in"
                         width={612}

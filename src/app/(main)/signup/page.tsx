@@ -4,13 +4,7 @@ import Link from "next/link"
 export default function SignUp() {
     return(
     <main className="flex items-center justify-center min-h-screen py-[50px] px-[40px]">
-        <div className="relative w-[1360px] min-h-[924px]">
-            <Image 
-                src="/images/Rectangle1.webp" alt="Background"
-                fill
-                className="object-cover rounded-3xl"
-                priority />
-                
+        <div className="w-full max-w-[1440px] rounded-3xl bg-primary bg-cover bg-center">
             <section className="relative z-10 flex justify-between items-center p-[19px]">
                 <Image
                     src="/images/signin-pic.webp" alt="gambar sign-in"

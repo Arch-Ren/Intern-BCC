@@ -12,7 +12,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'primary': "url('/images/Rectangle1.png')",
+        'primary': "url('/images/Rectangle1.webp')",
       },
 
       colors: {
