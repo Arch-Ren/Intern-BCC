@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import BenefitCard from '@/components/BenefitCard'
-import Navbar from '@/components/Navbar';
 import Footer from "@/components/Footer";
+import MainNavbar from '@/components/Navbar/mainNavbar';
 
 const benefits = [
   {
@@ -36,28 +36,28 @@ const listFitur = [
 
 export default function Home() {
   return (
-    <main className="relative overflow-x-hidden">
-      
+    <main className="relative">
+
       <div className="absolute top-0 left-0 w-full h-[1440px] -z-10">
-        <Image 
-        src="/images/Rectangle1.webp" alt="Background"
-        fill
-        className="object-cover"
-        priority />
+                <Image 
+                src="/images/Rectangle1.webp" alt="Background"
+                fill
+                className="object-cover"
+                priority />
+              </div>
+
+      <div className="py-10">
+        <MainNavbar />
       </div>
 
       <div className="z-10">
-        <header className="py-21">
-          <Navbar />
-        </header>
-
-        <section className="w-full">
-          <div className="relative w-[1301px] h-[724px]">
+        <section className="w-full flex justify-center">
+          <div className="relative max-w-[1440px] w-auto">
             <Image 
             src="/images/CardStartPage.webp" alt="cardBackground"
             width={1301}
             height={724}
-            className="mx-26 my-16 scale-105"
+            className=""
             />
             <div className="absolute inset-0 flex items-center px-[60px]">
               <div className="px-24 w-[850px]">
@@ -102,13 +102,15 @@ export default function Home() {
           </div>
         </section>
             
-        <section className="flex justify-between items-center p-20">
-          <img src="/images/Rectangle19.webp" alt="Gambar Anak" className="w-[632px] h-[578px] rounded-2xl"></img>
-          <div className="w-[632px] h-[261px]">
-            <h2 className="font-bold text-6xl text-[var(--greenLightPrimary)] py-8">Tentang Kami</h2>
-            <p className="text-2xl">Geazy adalah platform monitoring gizi digital berbasis website yang dirancang untuk membantu orang tua melakukan pemantauan pertumbuhan anak secara mandiri, akurat, dan efisien.</p>
-          </div>
-        </section>
+        <div className="flex justify-center w-full py-4">
+          <section className="flex justify-between items-center w-full max-w-[1440px]">
+            <img src="/images/Rectangle19.webp" alt="Gambar Anak" className="w-[632px] h-[578px] rounded-2xl"></img>
+            <div className="w-[632px] h-[261px]">
+              <h2 className="font-bold text-6xl text-[var(--greenLightPrimary)] py-8">Tentang Kami</h2>
+              <p className="text-2xl">Geazy adalah platform monitoring gizi digital berbasis website yang dirancang untuk membantu orang tua melakukan pemantauan pertumbuhan anak secara mandiri, akurat, dan efisien.</p>
+            </div>
+          </section>
+        </div>
             
         <footer>
           <Footer />

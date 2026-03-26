@@ -1,10 +1,8 @@
-'use client'
-
 import Image from "next/image"
 
 export default function Footer() {
     return(
-        <div className="overflow-x-hidden">
+        <div>
             <div className="relative h-[450px]">
                 <Image 
                 src="/images/Rectangle1.webp" alt="Background"

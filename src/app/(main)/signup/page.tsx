@@ -1,5 +1,3 @@
-'use client'
-
 import Image from "next/image"
 import Link from "next/link"
 
@@ -58,7 +56,7 @@ export default function SignUp() {
                         </button>
                             <div className="w-[571px] flex justify-center mb-8 text-white gap-2">
                             <p>Already Have An Account?</p>
-                        <button className="text-right font-bold hover:underline"><Link href="/login">Sign In</Link></button>
+                        <button className="text-right font-bold hover:underline"><Link href="/signin">Sign In</Link></button>
                     </div>
                     </div>
                 </div>
