@@ -36,7 +36,7 @@ export default function HomeNavbarSidebar() {
 
     return(
         <nav className="flex items-center max-h-max">
-            <div className="bg-[url('/images/Rectangle1.webp')] bg-cover py-8 px-2 rounded-3xl flex flex-col items-center">
+            <div className="bg-primary bg-cover py-8 px-2 rounded-3xl flex flex-col items-center w-[95px] flex-shrink-0">
                 <Image 
                 src="/images/geazy-logo.png" alt="logo"
                 width={60}
@@ -51,12 +51,9 @@ export default function HomeNavbarSidebar() {
                         <Link key={item.href} href={item.href} className="flex items-center pb-8 flex-col gap-2">
                             <Image 
                                 src={isActive ? item.iconActive : item.iconInactive} alt={item.iconName}
-                                width={60}
+                                width={79}
                                 height={60}
                             />
-                            <span className={isActive ? "text-black" : "text-white"}>
-                                {item.iconName}
-                            </span>
                         </Link>
                     )
                 })}
