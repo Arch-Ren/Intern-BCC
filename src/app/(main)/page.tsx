@@ -63,7 +63,7 @@ export default function Home() {
               <div className="pr-24 w-[850px]">
                 <h1 className="font-bold text-6xl text-[var(--greenLightPrimary)] pb-12 leading-snug">Geazy - Pantau Gizi Jadi Easy</h1>
                 <p className="text-[24px] pb-12 text-black">Platform website untuk membantu orang tua memantau pertumbuhan dan status gizi anak secara mandiri, akurat, dan efisien</p>
-                <Link href="/login"
+                <Link href="/signin"
                 className="
                 border-none flex w-[330px] h-[61px] rounded-xl bg-[#1F3A58] px-10 py-2 text-white justify-center items-center text-xl hover:bg-[#0C7D8F] active:bg-[#486C93] active:scale-95 active:shadow-lg">Coba Sekarang</Link>
               </div>
