@@ -9,7 +9,7 @@ type EduhubCardProps = {
 
 export default function EduhubCard({ item, onReadMore }: EduhubCardProps) {
     return(
-        <div className="bg-white rounded-3xl w-full p-4 shadow-lg flex flex-col">
+        <div className="bg-white rounded-3xl min-w-0 w-full p-4 shadow-lg flex flex-col">
             <Image 
                 src={item.picture} alt="contentPhoto"
                 width={366}
