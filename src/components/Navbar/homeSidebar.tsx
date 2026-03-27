@@ -58,7 +58,7 @@ export default function HomeNavbarSidebar() {
                     )
                 })}
 
-                <img src="/images/help-button.png" width={60} height={60} className="pt-24" />
+                <img src="/images/help-button.png" width={32} height={32} className="pt-24" />
             </div>
         </nav>
     )
