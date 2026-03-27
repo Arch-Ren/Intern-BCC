@@ -1,11 +1,11 @@
 export type Intakes = {
     label: string
-    current: number
-    max: number
+    percentage: number
+    className?: string
 }
 
 export const dummyIntakes: Intakes[] = [
-    {label: "Protein", current: 17.5, max: 100}, 
-    {label: "Kalori", current: 32.14, max: 100}, 
-    {label: "Lemak", current: 31, max: 100}
+    {label: "Protein", percentage: 17.5}, 
+    {label: "Kalori", percentage: 32.14}, 
+    {label: "Lemak", percentage: 31}
 ]
