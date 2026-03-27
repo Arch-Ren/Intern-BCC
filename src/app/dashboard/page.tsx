@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import IntakesCard from "@/components/IntakesCard"
 import EduhubModal from "@/components/EduhubModal"
+import Calendar from "@/components/Calendar"
 import { dummyIntakes } from "@/data/Intake"
 import { dummyChildren } from "@/data/Children"
 import { dummyEduhub, EduHub } from "@/data/Eduhub"
@@ -40,9 +41,9 @@ export default function Dashboard() {
 
     return (
         <>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-4 items-stretch">
 
-            <div className="col-span-2 flex flex-col items-center gap-4">
+            <div className="col-span-2 flex flex-col items-center gap-4 h-full">
                 <section className="grid w-full grid-cols-[1fr_1.6fr_1fr] gap-4">
                     {data.map((item) => (
                         <IntakesCard key={item.label} {...item} />
@@ -54,7 +55,7 @@ export default function Dashboard() {
                         <h2 className="text-4xl text-white font-bold tracking-wider">Status BMI</h2>
                         <div className="flex flex-col items-end gap-3">
                             <p className="text-4xl font-bold tracking-widest text-[#00ff44] min-w-[158px]">{children.bmi}</p>
-                            <ActionButton className="py-2 max-h-[43px] min-w-[158px]" variant="secondary" rounded="xsm" onClick={() => console.log("edit data")}>Ubah Data</ActionButton>
+                            <LinkButton href="/dashboard/tracker" className="py-2 max-h-[43px] min-w-[158px]" variant="secondary" rounded="xsm">Ubah Data</LinkButton>
                         </div>
                     </div>
                 </section>
@@ -115,7 +116,7 @@ export default function Dashboard() {
                 </section>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 h-full">
                 <section className="flex min-h-[545px] items-center justify-center rounded-3xl bg-white shadow-xl">
                     <div className="flex flex-col items-center gap-2 px-6 py-8 text-center">
                         <Image
@@ -131,8 +132,8 @@ export default function Dashboard() {
                     </div>
                 </section>
                 
-                <div>
-                    Calendar
+                <div className="flex-1 min-h-0">
+                    <Calendar />
                 </div>
             </div>
         </div>
