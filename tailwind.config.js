@@ -19,6 +19,7 @@ module.exports = {
         primary: "#43BA9C",
         primaryHover: "#2F987E",
         primaryActive: "#125443",
+        secondary: "#0C7D8F",
         color4: "#1F3A58",
         color4Hover: "#4B719C",
         color4Active: "#D1E7FF"

@@ -60,9 +60,9 @@ export default function Home() {
             className=""
             />
             <div className="absolute inset-0 flex items-center px-[60px]">
-              <div className="px-24 w-[850px]">
+              <div className="pr-24 w-[850px]">
                 <h1 className="font-bold text-6xl text-[var(--greenLightPrimary)] pb-12 leading-snug">Geazy - Pantau Gizi Jadi Easy</h1>
-                <p className="text-[24px] pb-12">Platform website untuk membantu orang tua memantau pertumbuhan dan status gizi anak secara mandiri, akurat, dan efisien</p>
+                <p className="text-[24px] pb-12 text-black">Platform website untuk membantu orang tua memantau pertumbuhan dan status gizi anak secara mandiri, akurat, dan efisien</p>
                 <Link href="/login"
                 className="
                 border-none flex w-[330px] h-[61px] rounded-xl bg-[#1F3A58] px-10 py-2 text-white justify-center items-center text-xl hover:bg-[#0C7D8F] active:bg-[#486C93] active:scale-95 active:shadow-lg">Coba Sekarang</Link>
@@ -72,7 +72,7 @@ export default function Home() {
         </section>
 
         <section>
-          <h1 className="mt-48 mb-16 text-white font-bold text-7xl text-shadow-lg text-center">Benefit</h1>
+          <h1 className="mt-48 mb-8 text-white font-bold text-7xl text-shadow-lg text-center">Benefit</h1>
           <div className="flex gap-8 justify-center">
             {benefits.map((benefit) => (
               <BenefitCard 
@@ -84,17 +84,12 @@ export default function Home() {
           </div>
         </section>
           
-        <section className="bg-transparent">
-          <h1 className="mt-30 font-bold text-7xl text-[#43BA9C] text-shadow-lg text-center">Fitur Kami</h1>
-          <div className="relative w-full h-[300px] overflow-hidden">
-            <div className="absolute inset-0 flex flex-row gap-4 justify-center items-center px-16">
+        <section>
+          <h1 className="mt-24 mb-2 font-bold text-7xl text-[#43BA9C] text-shadow-lg text-center">Fitur Kami</h1>
+          <div className="relative w-full min-h-[200px] overflow-hidden mb-24">
+            <div className="absolute inset-0 flex flex-row gap-4 justify-center items-center">
               {listFitur.map((fitur) => (
-                <div key={fitur.id} className="relative bg-transparent border-none rounded-2xl p-6 w-[307px] h-[150px] flex overflow-hidden items-center justify-center shadow-xl">
-                  <Image 
-                  src="/images/Rectangle1.webp" alt="cardbg"
-                  fill
-                  className="object-cover h-[200px]"
-                  />
+                <div key={fitur.id} className="relative bg-primary border-none rounded-2xl p-6 w-[307px] h-[150px] flex overflow-hidden items-center justify-center shadow-lg">
                   <h2 className="relative z-10 font-semibold text-3xl text-center text-[var(--background)]">{fitur.fitur}</h2>
                 </div>
                 ))}
@@ -102,7 +97,7 @@ export default function Home() {
           </div>
         </section>
             
-        <div className="flex justify-center w-full py-4">
+        <div className="flex justify-center w-full mb-12">
           <section className="flex justify-between items-center w-full max-w-[1440px]">
             <img src="/images/Rectangle19.webp" alt="Gambar Anak" className="w-[632px] h-[578px] rounded-2xl"></img>
             <div className="w-[632px] h-[261px]">
