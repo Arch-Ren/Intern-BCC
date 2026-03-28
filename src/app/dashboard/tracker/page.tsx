@@ -1,5 +1,8 @@
+import GrowthContent from "@/components/Tracker/GrowthContent";
+
+
 export default function Tracker() {
     return(
-        <div>ini tracker</div>
+        <GrowthContent />
     )
 }

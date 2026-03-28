@@ -4,7 +4,7 @@ export default function IntakesCard({ label, percentage, className = "" }: Intak
     const safePercentage = Math.max(0, Math.min(percentage, 100))
 
     return(
-        <div className={`w-full rounded-3xl border border-slate-400 bg-white px-4 py-4 shadow-sm ${className}`}>
+        <div className={`w-full rounded-3xl border border-black bg-white px-4 py-4 shadow-sm ${className}`}>
             <div className="mb-3 flex items-center justify-between gap-2">
                 <h3 className="text-3xl font-bold text-[#3a3a3a]">{label}</h3>
                 <span className="text-2xl font-semibold text-[#FFE500]">{percentage}%</span>

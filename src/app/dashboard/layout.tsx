@@ -1,5 +1,6 @@
 import HomeSidebar from "@/components/Navbar/homeSidebar";
 import HomeNavbar from "@/components/Navbar/homeNavbar";
+import { SelectedChildProvider } from "@/context/SelectedChild";
 
 export default function DashboardLayout({
   children,
@@ -13,7 +14,9 @@ export default function DashboardLayout({
             <div className="flex flex-col min-w-0 flex-1 pl-6">
                 <HomeNavbar/>
                 <div className="min-w-0 pt-4">
-                    { children }
+                    <SelectedChildProvider>
+                      { children }
+                    </SelectedChildProvider>
                 </div>
             </div>
         </div>

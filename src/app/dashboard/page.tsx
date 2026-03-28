@@ -1,24 +1,32 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
+
 import IntakesCard from "@/components/Card/IntakesCard"
 import EduhubModal from "@/components/EduhubModal"
 import EduhubSection from "@/components/Dashboard/Eduhub"
 import CalendarSection from "@/components/Dashboard/Calendar"
+
+import { useSelectedChild } from "@/context/SelectedChild"
+
 import { dummyIntakes } from "@/data/Intake"
 import { dummyChildren } from "@/data/Children"
 import { dummyEduhub, EduHub } from "@/data/Eduhub"
-import { ActionButton } from "@/components/ui/Button/Action"
 import { LinkButton } from "@/components/ui/Button/Link"
+import ProfileCard from "@/components/ProfileCard"
+import ProfileSwitchModal from "@/components/SwitchChildModal"
 
 export default function Dashboard() {
     const router = useRouter()
 
+    const [selectedArticle, setSelectedArticle] = useState<EduHub | null>(null)
+    const [isProfilModalOpen, setIsProfileModalOpen] = useState(false)
+
     const data = dummyIntakes
-    const children = dummyChildren[0]
     const featuredArticle = dummyEduhub[0]
+    const{ selectedChild, selectedChildIndex, setSelectedChildIndex } = useSelectedChild()
 
     useEffect(() => {
         const user = localStorage.getItem("user")
@@ -27,22 +35,30 @@ export default function Dashboard() {
         }
     }, [router])
 
-    const [selectedArticle, setSelectedArticle] = useState<EduHub | null>(null)
-
     function openEDuhub(article: EduHub) {
         setSelectedArticle(article)
     }
-
     function closeEduhub() {
         setSelectedArticle(null)
+    }
+
+    function openProfileModal() {
+        setIsProfileModalOpen(true)
+    }
+    function closeProfileModal() {
+        setIsProfileModalOpen(false)
+    }
+
+    function selectChild(index: number) {
+        setSelectedChildIndex(index)
+        closeProfileModal()
     }
 
     return (
         <>
         <div className="grid grid-cols-3 gap-4 items-stretch">
-
             <div className="col-span-2 flex flex-col items-center gap-4 h-full">
-                
+
                 <section className="grid w-full grid-cols-[1fr_1.6fr_1fr] gap-4">
                     {data.map((item) => (
                         <IntakesCard key={item.label} {...item} />
@@ -53,7 +69,7 @@ export default function Dashboard() {
                     <div className="flex justify-between">
                         <h2 className="text-4xl text-white font-bold tracking-wider">Status BMI</h2>
                         <div className="flex flex-col items-end gap-3">
-                            <p className="text-4xl font-bold tracking-widest text-[#00ff44] min-w-[158px]">{children.bmi}</p>
+                            <p className="text-4xl font-bold tracking-widest text-[#00ff44] min-w-[158px]">{selectedChild.bmi}</p>
                             <LinkButton href="/dashboard/tracker" className="py-2 max-h-[43px] min-w-[158px]" variant="secondary" rounded="xsm">Ubah Data</LinkButton>
                         </div>
                     </div>
@@ -85,21 +101,12 @@ export default function Dashboard() {
             </div>
 
             <div className="flex flex-col gap-4 h-full">
-                <section className="flex min-h-[545px] items-center justify-center rounded-3xl bg-white shadow-xl">
-                    <div className="flex flex-col items-center gap-2 px-6 py-8 text-center">
-                        <Image
-                        src={children.photo} alt="photo"
-                        width={209}
-                        height={283}
-                        className="rounded-xl mb-4"
-                        />
-                        <p className="font-bold text-3xl">{children.name}</p>
-                        <p className="text-2xl">{children.gender}</p>
-                        <p className="text-2xl">{children.age} Tahun</p>
-                        <ActionButton variant="primary" rounded="xsm" className="font-semibold tracking-widest">Ganti Profil</ActionButton>
-                    </div>
-                </section>
-                
+
+                <ProfileCard 
+                    child={selectedChild} 
+                    onChangeProfile={openProfileModal} 
+                />
+
                 <div className="flex-1 min-h-0">
                     <CalendarSection />
                 </div>
@@ -110,6 +117,13 @@ export default function Dashboard() {
             article={selectedArticle}
             isOpen={!!selectedArticle}
             onClose={closeEduhub}
+        />
+
+        <ProfileSwitchModal 
+            isOpen={isProfilModalOpen}
+            selectedIndex={selectedChildIndex}
+            onClose={closeProfileModal}
+            onSelect={selectChild}
         />
         </>
     )
