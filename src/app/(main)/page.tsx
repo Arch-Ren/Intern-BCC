@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import BenefitCard from '@/components/BenefitCard'
+import BenefitCard from '@/components/Card/BenefitCard'
 import Footer from "@/components/Footer";
 import MainNavbar from '@/components/Navbar/mainNavbar';
 

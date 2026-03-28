@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { LinkButton } from '../Button/Link'
+import { LinkButton } from '../ui/Button/Link'
 
 export default function mainNavbar() {
     return (

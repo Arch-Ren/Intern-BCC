@@ -1,11 +1,13 @@
 'use client'
 
-import { ActionButton } from "@/components/Button/Action"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { ActionButton } from "@/components/ui/Button/Action"
 import { User } from "@/data/User"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 export default function SignIn() {
 
@@ -13,7 +15,9 @@ export default function SignIn() {
     const [password, setPassword] = useState("")
     const router = useRouter()
 
-    const handleLogin =() => {
+    const handleLogin =(e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
         if (email === User.email && password == User.password) {
             localStorage.setItem("user", JSON.stringify({
                 name: User.name,
@@ -21,8 +25,10 @@ export default function SignIn() {
                 email: User.email,
             }))
             router.push("/dashboard")
+        } else if (email === User.email && password != User.password){
+            alert("Password salah")
         } else {
-            alert("Email atau password salah")
+            alert("Silahkan isi Email dan password anda")
         }
     }
 
@@ -38,37 +44,33 @@ export default function SignIn() {
                         className="w-1/2 h-auto"
                         />
                 
-                        <div className="flex flex-col items-center justify-center w-full gap-4 text-xl">
+                        <form className="flex flex-col items-center justify-center w-full gap-4 text-xl" onSubmit={handleLogin}>
                             <h1 className="text-white text-5xl font-bold mb-12">Sign In</h1>
-                            <div>
-                                <div className="rounded-[20px] bg-white w-[571px] h-[80px] mb-4 flex items-center p-4">
-                                    <input onChange={(e) =>setEmail(e.target.value)} type="email" placeholder="Email" className="w-full bg-transparent border-none outline-none"/>
-                                </div>
+                            <div className="flex flex-col gap-4 ">
+                                <Input placeholder="Email" type="email" onChange={(e) =>setEmail(e.target.value)} />
 
-                                <div className="rounded-[20px] bg-white w-[571px] h-[80px] mb-4 flex items-center p-4">
-                                    <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" className="w-full bg-transparent border-none outline-none"/>
-                                </div>
+                                <Input placeholder="Password" type="password" onChange={(e) =>setPassword(e.target.value)} />
 
                                 <div className="w-[571px] flex justify-end mb-8">
-                                    <button className="text-white text-right font-semibold hover:underline">Forgot Password?</button>
+                                    <Button variant="link" className="text-white text-right font-semibold text-xl" type="button">Forgot Password?</Button>
                                 </div>
                             </div>
 
-                            <ActionButton variant="secondary" rounded="lg" className="text-2xl min-w-[570px] min-h-[78px]" onClick={handleLogin}>SignIn</ActionButton>
-                            <button className="bg-white rounded-[40px] text-white text-center w-[570px] h-[78px] flex justify-center items-center gap-4">
+                            <ActionButton variant="secondary" rounded="lg" className="text-2xl min-w-[570px] min-h-[78px]" type="submit">Sign In</ActionButton>
+                            <button className="bg-white rounded-[40px] text-white text-center w-[570px] h-[78px] flex justify-center items-center gap-4 active:scale-95 active:brightness-75" type="button">
                                 <Image 
                                 src="/images/google-icon.webp" alt="google-icon"
                                 width={35}
                                 height={35}
                                 />
-                                <p className="text-[#B8B8B8]">Sign In With Google</p>
+                                <p className="text-black font-semibold">Sign In With Google</p>
                             </button>
 
                             <div className="w-[571px] flex justify-center mb-8 text-white gap-2">
                                 <p>Don't Have An Account? </p>
                                 <Link className="text-right font-bold hover:underline" href="/signup">Sign Up</Link>
                             </div>
-                        </div>
+                        </form>
                     </section>
                 </div>
 

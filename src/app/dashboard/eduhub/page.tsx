@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react"
-import EduhubCard from "@/components/EduhubCard"
+import EduhubCard from "@/components/Card/EduhubCard"
 import EduhubModal from "@/components/EduhubModal"
 import { dummyEduhub, EduHub } from "@/data/Eduhub"
 import { EduhubFilter } from "@/data/EduHubFilter"

@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { ActionButton } from "./Button/Action"
+import { ActionButton } from "../ui/Button/Action"
 import { EduHub } from "@/data/Eduhub"
 
 type EduhubCardProps = {

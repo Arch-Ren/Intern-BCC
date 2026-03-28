@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { dummyCalendarMonths, dummyIntakesHistory } from "@/data/Calendar"
-import { LinkButton } from "./Button/Link"
+import { LinkButton } from "../ui/Button/Link"
 
 export default function Calendar() {
     const [selectedMonthIndex, setSelectedMonthIndex] = useState(0)

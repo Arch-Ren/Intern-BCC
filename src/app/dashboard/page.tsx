@@ -3,17 +3,22 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import IntakesCard from "@/components/IntakesCard"
+import IntakesCard from "@/components/Card/IntakesCard"
 import EduhubModal from "@/components/EduhubModal"
-import Calendar from "@/components/Calendar"
+import EduhubSection from "@/components/Dashboard/Eduhub"
+import CalendarSection from "@/components/Dashboard/Calendar"
 import { dummyIntakes } from "@/data/Intake"
 import { dummyChildren } from "@/data/Children"
 import { dummyEduhub, EduHub } from "@/data/Eduhub"
-import { ActionButton } from "@/components/Button/Action"
-import { LinkButton } from "@/components/Button/Link"
+import { ActionButton } from "@/components/ui/Button/Action"
+import { LinkButton } from "@/components/ui/Button/Link"
 
 export default function Dashboard() {
     const router = useRouter()
+
+    const data = dummyIntakes
+    const children = dummyChildren[0]
+    const featuredArticle = dummyEduhub[0]
 
     useEffect(() => {
         const user = localStorage.getItem("user")
@@ -22,21 +27,14 @@ export default function Dashboard() {
         }
     }, [router])
 
-    const data = dummyIntakes
-    const children = dummyChildren[0]
-    const featuredArticle = dummyEduhub[0]
-
     const [selectedArticle, setSelectedArticle] = useState<EduHub | null>(null)
-    const [isEduhubOpen, setIsEduhubOpen] = useState(false)
 
-    function handleOpenEDuhub(article: EduHub) {
+    function openEDuhub(article: EduHub) {
         setSelectedArticle(article)
-        setIsEduhubOpen(true)
     }
 
-    function handleCloseEduhub() {
+    function closeEduhub() {
         setSelectedArticle(null)
-        setIsEduhubOpen(false)
     }
 
     return (
@@ -44,6 +42,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-3 gap-4 items-stretch">
 
             <div className="col-span-2 flex flex-col items-center gap-4 h-full">
+                
                 <section className="grid w-full grid-cols-[1fr_1.6fr_1fr] gap-4">
                     {data.map((item) => (
                         <IntakesCard key={item.label} {...item} />
@@ -79,41 +78,10 @@ export default function Dashboard() {
                     />
                 </a>
 
-                <section className="w-full">
-                    <div className="mb-4 flex justify-between items-center">
-                        <h2 className="text-2xl font-semibold">Baca EduHub</h2>
-                        <LinkButton href="/dashboard/eduhub" variant="primary" rounded="xsm" className="w-[170px] max-h-[40px]">Lihat Semua</LinkButton>
-                    </div>
-
-                    <div className="flex w-full gap-5 rounded-3xl bg-white p-4 shadow-md">
-                        <div className="max-w-[309px] shrink-0">
-                            <Image 
-                                src={featuredArticle.picture} alt={featuredArticle.title}
-                                width={0}
-                                height={0}
-                                sizes="100vw"
-                                className="h-full w-full rounded-2xl object-cover"
-                            />
-                        </div>
-
-                        <div className="flex flex-1 flex-col justify-between">
-                            <div>
-                                <h3 className="mb-4 text-2xl font-bold leading-snug text-[#243B63]">
-                                    {featuredArticle.title}
-                                </h3>
-                                <p className="max-w-[750px] text-[18px] leading-8 text-[#3E4C63]">
-                                    {featuredArticle.summary}
-                                </p>
-                            </div>
-
-                            <div className="mt-6 flex justify-end">
-                                <ActionButton variant="primary" rounded="xsm" onClick={() => handleOpenEDuhub(featuredArticle)}>
-                                    Baca Selengkapnya
-                                </ActionButton>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <EduhubSection
+                    article={featuredArticle}
+                    onReadMore={openEDuhub}
+                />
             </div>
 
             <div className="flex flex-col gap-4 h-full">
@@ -133,15 +101,15 @@ export default function Dashboard() {
                 </section>
                 
                 <div className="flex-1 min-h-0">
-                    <Calendar />
+                    <CalendarSection />
                 </div>
             </div>
         </div>
 
         <EduhubModal 
             article={selectedArticle}
-            isOpen={isEduhubOpen}
-            onClose={handleCloseEduhub}
+            isOpen={!!selectedArticle}
+            onClose={closeEduhub}
         />
         </>
     )

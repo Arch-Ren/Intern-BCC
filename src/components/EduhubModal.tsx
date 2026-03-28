@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image"
-import { ActionButton } from "./Button/Action"
+import { ActionButton } from "./ui/Button/Action"
 import type { EduHub } from "@/data/Eduhub"
 
 type EduhubModalProps = {
