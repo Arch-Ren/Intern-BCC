@@ -2,7 +2,7 @@ import { BaseButton } from "./Base"
 
 type ActionButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
     rounded?: "xsm" | "sm" | "md" | "lg" | "full";
-    variant?: "primary" | "secondary";
+    variant?: "primary" | "secondary" | "icon";
     className?: string;
 };
 

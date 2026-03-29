@@ -5,7 +5,7 @@ type LinkButtonProps = {
     href: string;
     children: React.ReactNode;
     rounded?: "xsm" | "sm" | "md" | "lg" | "full";
-    variant?: "primary" | "secondary";
+    variant?: "primary" | "secondary" | "icon";
     className?: string;
 }
 export function LinkButton({

@@ -1,7 +1,7 @@
 type BaseButtonProps = {
     children: React.ReactNode;
     rounded?: "xsm" | "sm" | "md" | "lg" | "full";
-    variant?: "primary" | "secondary"
+    variant?: "primary" | "secondary" | "icon";
     className?: string;
 };
 
@@ -11,7 +11,7 @@ export function BaseButton({
     variant = "primary",
     className = "",
 }: BaseButtonProps) {
-    const baseStyle = "border-none px-6 py-4 shadow-md flex justify-center items-center transition";
+    const baseStyle = "border-none px-6 py-4 flex justify-center items-center transition";
 
     const roundedStyle = {
         xsm: "rounded-[12px]",
@@ -22,8 +22,9 @@ export function BaseButton({
     };
 
     const variantStyle = {
-        primary: "bg-primary text-white hover:bg-primaryHover active:bg-primaryActive active:scale-95 active:shadow-lg",
-        secondary: "bg-color4 text-white hover:bg-color4Hover active:bg-color4Active active:scale-95 active:shadow-lg"
+        primary: "bg-primary text-white shadow-md hover:bg-primaryHover active:bg-primaryActive active:scale-95 active:shadow-lg",
+        secondary: "bg-color4 text-white shadow-md hover:bg-color4Hover active:bg-color4Active active:scale-95 active:shadow-lg",
+        icon: "active:scale-95 hover:bg-black/10 active:bg-black-20"
     };
 
     return (
