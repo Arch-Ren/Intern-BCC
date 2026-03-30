@@ -8,7 +8,7 @@ export type FoodItem = {
     image: string
 };
 
-export const foods: FoodItem[] = [
+export const dummyFoods: FoodItem[] = [
     {
         id: 1,
         name: "Ayam Paha Bawah",
