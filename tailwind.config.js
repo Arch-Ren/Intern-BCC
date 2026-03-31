@@ -22,7 +22,8 @@ module.exports = {
         secondary: "#0C7D8F",
         color4: "#1F3A58",
         color4Hover: "#4B719C",
-        color4Active: "#D1E7FF"
+        color4Active: "#D1E7FF",
+        inputBackground: "#EFFDFF"
       }
     },
   },

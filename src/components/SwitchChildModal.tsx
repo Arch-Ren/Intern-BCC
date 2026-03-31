@@ -13,12 +13,12 @@ interface SwitchChildrenModalProps {
     onSelect: (index: number) => void
 }
 
-export default function ProfileSwitchModal({ isOpen, selectedIndex, onClose, onSelect}: SwitchChildrenModalProps) {
+export default function ProfileSwitchModal({ isOpen, selectedIndex, onClose, onSelect }: SwitchChildrenModalProps) {
     const [editIndex, setEditIndex] = useState<number | null>(null)
-    
+
     if (!isOpen) return null
 
-    return(
+    return (
         <>
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={onClose}>
                 <div className="min-w-[500px] rounded-[32px] bg-white p-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
@@ -26,21 +26,20 @@ export default function ProfileSwitchModal({ isOpen, selectedIndex, onClose, onS
                         <h2 className="col-start-2 text-xl font-bold ">Profil Anak</h2>
                         <button type="button" onClick={onClose} className="col-start-3 text-xl font-bold text-black text-right pr-4"> x </button>
                     </div>
-                
+
                     <div className="flex flex-col gap-4">
                         {dummyChildren.map((child, index) => {
                             const isActive = index === selectedIndex
 
-                            return(
+                            return (
                                 <div key={child.name}
-                                    className={`flex items-center justify-between rounded-full border px-4 py-3 text-left transition ${
-                                        isActive ? "border-primary bg-primary/10" : "border-primary hover:bg-gray-50"
-                                    }`}
+                                    className={`flex items-center justify-between rounded-full border px-4 py-3 text-left transition ${isActive ? "border-primary bg-primary/10" : "border-primary hover:bg-gray-50"
+                                        }`}
                                 >
                                     <button type="button" onClick={() => onSelect(index)} className="w-full">
                                         <div className="flex justify-between items-center">
                                             <div className="flex gap-4 items-center">
-                                                <Image 
+                                                <Image
                                                     src={child.photo} alt={child.name}
                                                     width={48}
                                                     height={48}
@@ -49,7 +48,7 @@ export default function ProfileSwitchModal({ isOpen, selectedIndex, onClose, onS
                                                 <p className="font-semibold">{child.name}</p>
                                             </div>
                                             <p className="">{index === 0 ? "Anak Pertama" : `Anak Ke-${index + 1}`}</p>
-                                        </div>                                                                
+                                        </div>
                                     </button>
 
                                     <button
@@ -58,10 +57,10 @@ export default function ProfileSwitchModal({ isOpen, selectedIndex, onClose, onS
                                         className="ml-3 flex items-center justify-center h-9 aspect-square rounded-full hover:bg-primary/10"
                                     >
                                         <Image
-                                        src="/images/Pencil.png"
-                                        alt="edit"
-                                        width={18}
-                                        height={18}
+                                            src="/images/Pencil.png"
+                                            alt="edit"
+                                            width={18}
+                                            height={18}
                                         />
                                     </button>
                                 </div>
@@ -69,7 +68,7 @@ export default function ProfileSwitchModal({ isOpen, selectedIndex, onClose, onS
                         })}
                     </div>
 
-                    <LinkButton href="/dashboard" rounded="xsm" className="mt-8">Tambah Profil Anak</LinkButton>
+                    <LinkButton href="/childProfileForm" rounded="xsm" className="mt-8">Tambah Profil Anak</LinkButton>
                 </div>
             </div>
 
