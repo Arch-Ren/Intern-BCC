@@ -119,7 +119,7 @@ export default function ChildProfilePage() {
                         minHeight: "85vh",
                     }}
                 >
-                    <button className="absolute top-20 right-20 text-primary hover:bg-black/20 px-2 rounded-full" onClick={handleClose}
+                    <button className="absolute top-8 right-8 text-primary font-bold hover:bg-black/20 px-2 rounded-full" onClick={handleClose}
                     >
                         X
                     </button>

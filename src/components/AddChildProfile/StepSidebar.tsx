@@ -60,18 +60,12 @@ export default function StepSidebar({ steps, activeStep }: StepSideBarProps) {
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        backgroundColor: isCompleted
-                                            ? "white"
-                                            : isActive
-                                                ? "#43BA9C"
-                                                : "transparent",
+                                        backgroundColor: isCompleted ? "white" : isActive ? "#43BA9C" : "#43BA9C",
                                         color: isCompleted ? "#0E5F4D" : "white",
                                         zIndex: 2,
                                     }}
                                 >
-                                    {isCompleted ? (
-                                        <img src="/images/checklist.png" alt="check" />
-                                    ) : isActive ? (
+                                    {isCompleted ? (<img src="/images/checklist.png" alt="check" />) : isActive ? (
                                         <Box
                                             sx={{
                                                 width: 8,

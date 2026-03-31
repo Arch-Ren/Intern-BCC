@@ -3,71 +3,62 @@
 import { ActionButton } from "./ui/Button/Action"
 import EditProfileModal from "./EditProfileModal"
 
-type ChildType = {
+type ParentType = {
     name: string
     photo: string
-    birthDate?: string
-    gender?: string
-    bloodType?: string
-    allergy?: string
+    username?: string
+    email?: string
+    phone?: string
 }
 
-interface EditChildProfileModalProps {
+interface EditParentProfileModalProps {
     isOpen: boolean
-    child: ChildType | null
+    parent: ParentType | null
     onClose: () => void
 }
 
-export default function EditChildProfileModal({
+export default function EditParentProfileModal({
     isOpen,
-    child,
+    parent,
     onClose,
-}: EditChildProfileModalProps) {
-    if (!isOpen || !child) return null
+}: EditParentProfileModalProps) {
+    if (!isOpen || !parent) return null
 
     return (
         <EditProfileModal
             isOpen={isOpen}
-            name={child.name}
-            photo={child.photo}
+            name={parent.name}
+            photo={parent.photo}
             onClose={onClose}
         >
             <div>
                 <label className="mb-1 block text-lg font-semibold text-black">Nama</label>
                 <input
-                    defaultValue={child.name}
+                    defaultValue={parent.name}
                     className="w-full rounded-xl bg-[#DDF3EE] px-4 py-3 outline-none"
                 />
             </div>
 
             <div>
-                <label className="mb-1 block text-lg font-semibold text-black">Tanggal Lahir</label>
+                <label className="mb-1 block text-lg font-semibold text-black">Username</label>
                 <input
-                    defaultValue={child.birthDate ?? "13 Maret 2019"}
+                    defaultValue={parent.username ?? "LaylaRhma"}
                     className="w-full rounded-xl bg-[#DDF3EE] px-4 py-3 outline-none"
                 />
             </div>
 
             <div>
-                <label className="mb-1 block text-lg font-semibold text-black">Jenis Kelamin</label>
+                <label className="mb-1 block text-lg font-semibold text-black">Email</label>
                 <input
-                    defaultValue={child.gender ?? "Perempuan"}
+                    defaultValue={parent.email ?? "lylrahma@gmail.com"}
                     className="w-full rounded-xl bg-[#DDF3EE] px-4 py-3 outline-none"
                 />
             </div>
 
             <div>
-                <label className="mb-1 block text-lg font-semibold text-black">Golongan Darah</label>
+                <label className="mb-1 block text-lg font-semibold text-black">Nomor</label>
                 <input
-                    defaultValue={child.bloodType ?? "AB"}
-                    className="w-full rounded-xl bg-[#DDF3EE] px-4 py-3 outline-none"
-                />
-            </div>
-
-            <div>
-                <label className="mb-1 block text-lg font-semibold text-black">Alergi</label>
-                <input
-                    defaultValue={child.allergy ?? "-"}
+                    defaultValue={parent.phone ?? "088798556436"}
                     className="w-full rounded-xl bg-[#DDF3EE] px-4 py-3 outline-none"
                 />
             </div>

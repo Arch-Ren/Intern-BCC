@@ -5,11 +5,11 @@ import Image from "next/image"
 import { useEffect, useState, useRef } from "react"
 import { dummyNotification } from "@/data/Notification"
 
-const pageNames : Record<string, string> = {
-    "/dashboard" : "Dashboard",
-    "/dashboard/tracker" : "G - Growth Tracker",
-    "/dashboard/eduhub" : "G - EduHub",
-    "/dashboard/connect" : "G - Connect",
+const pageNames: Record<string, string> = {
+    "/dashboard": "Dashboard",
+    "/dashboard/tracker": "G - Growth Tracker",
+    "/dashboard/eduhub": "G - EduHub",
+    "/dashboard/connect": "G - Connect",
 }
 
 export default function HomeNavbar() {
@@ -19,7 +19,7 @@ export default function HomeNavbar() {
 
     const Notification = dummyNotification
 
-    const [user, setUser] = useState({ name: "", photo: ""})
+    const [user, setUser] = useState({ name: "", photo: "" })
     const [openProfile, setOpenProfile] = useState(false)
     const [openNotif, setOpenNotif] = useState(false)
 
@@ -37,11 +37,11 @@ export default function HomeNavbar() {
         function handleClickOutside(e: MouseEvent) {
             const target = e.target as Node
 
-            if(profileRef.current && !profileRef.current.contains(target)) {
+            if (profileRef.current && !profileRef.current.contains(target)) {
                 setOpenProfile(false)
             }
 
-            if(notifRef.current && !notifRef.current.contains(target)) {
+            if (notifRef.current && !notifRef.current.contains(target)) {
                 setOpenNotif(false)
             }
         }
@@ -51,8 +51,8 @@ export default function HomeNavbar() {
     }, [])
 
     function getNotificationTextColor(type: string) {
-        if(type === "reminder") return "text-[#FFBB00]"
-        if(type === "success") return "text-[secondary]"
+        if (type === "reminder") return "text-[#FFBB00]"
+        if (type === "success") return "text-[secondary]"
         return "text-black"
     }
 
@@ -61,13 +61,13 @@ export default function HomeNavbar() {
         router.push("/signin")
     }
 
-    return(
+    return (
         <nav className="flex justify-between py-4 items-center">
             <h1 className="text-4xl font-bold">{currentPage}</h1>
 
             <div className="flex justify-center gap-6">
                 <button type="button" className="cursor-pointer">
-                    <Image 
+                    <Image
                         src="/images/search.png" alt="search"
                         width={60}
                         height={60}
@@ -79,7 +79,7 @@ export default function HomeNavbar() {
                         setOpenNotif((prev) => !prev)
                         setOpenProfile(false)
                     }} className="cursor-pointer">
-                        <Image 
+                        <Image
                             src="/images/notification.png" alt="notification"
                             width={60}
                             height={60}
@@ -107,7 +107,7 @@ export default function HomeNavbar() {
                             <div className="max-h-[420px] space-y-4 overflow-y-auto px-5 py-4">
                                 {Notification.map((item) => (
                                     <div key={item.id} className="flex gap-3">
-                                        <Image 
+                                        <Image
                                             src={item.icon} alt={item.type}
                                             width={22}
                                             height={22}
@@ -133,7 +133,7 @@ export default function HomeNavbar() {
                         setOpenNotif(false)
                     }}
                         className="flex cursor-pointer items-center gap-4">
-                        <Image 
+                        <Image
                             src={user.photo || "/images/default-avatar.png"} alt="foto profil"
                             width={60}
                             height={60}
@@ -148,7 +148,7 @@ export default function HomeNavbar() {
                     {openProfile && (
                         <div className="absolute right-0 top-[72px] z-50 w-[260px] rounded-[20px] bg-white shadow-2xl">
                             <div className="flex items-center gap-3 border-b border-primary pb-3 p-3">
-                                <Image 
+                                <Image
                                     src={user.photo || "/images/default/avatar.png"} alt="foto profil"
                                     width={48}
                                     height={48}
@@ -156,7 +156,7 @@ export default function HomeNavbar() {
                                 />
                                 <div>
                                     <p className="text-[18px] font-medium text-[#333]">{user.name || "Pengguna"}</p>
-                                    <p className="text-sm text-gray-500">Parrent</p>
+                                    <p className="text-sm text-gray-500">Parent</p>
                                 </div>
                             </div>
 
@@ -164,7 +164,10 @@ export default function HomeNavbar() {
                                 <button
                                     type="button"
                                     className="flex w-full items-center gap-2 py-2 text-left"
-                                    onClick={() => console.log("Pengaturan")} 
+                                    onClick={() => {
+                                        setOpenProfile(false)
+                                        router.push("/dashboard/profile")
+                                    }}
                                 >
                                     <img src="/images/setting.png" alt="setting" width="24"></img>
                                     <span>Pengaturan</span>
@@ -175,8 +178,8 @@ export default function HomeNavbar() {
                                     className="flex w-full items-center gap-2 py-2 text-left"
                                     onClick={handleLogout}
                                 >
-                                        <img src="/images/logout.png" alt="logout" width="24"></img>
-                                        <span>Keluar</span>
+                                    <img src="/images/logout.png" alt="logout" width="24"></img>
+                                    <span>Keluar</span>
                                 </button>
                             </div>
                         </div>
