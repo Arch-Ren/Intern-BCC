@@ -34,14 +34,14 @@ const menu = [
 export default function HomeNavbarSidebar() {
     const pathname = usePathname()
 
-    return(
-        <nav className="flex items-center max-h-max">
-            <div className="bg-primary bg-cover py-8 px-2 rounded-3xl flex flex-col items-center w-[95px] flex-shrink-0">
-                <Image 
-                src="/images/geazy-logo.png" alt="logo"
-                width={60}
-                height={60}
-                className="pb-24"
+    return (
+        <nav className="flex items-center h-max">
+            <div className="bg-primary bg-cover pt-8 pb-24 px-2 rounded-3xl flex flex-col items-center w-[95px] flex-shrink-0">
+                <Image
+                    src="/images/geazy-logo.png" alt="logo"
+                    width={60}
+                    height={60}
+                    className="pb-24"
                 />
 
                 {menu.map((item) => {
@@ -49,7 +49,7 @@ export default function HomeNavbarSidebar() {
 
                     return (
                         <Link key={item.href} href={item.href} className="flex items-center pb-8 flex-col gap-2">
-                            <Image 
+                            <Image
                                 src={isActive ? item.iconActive : item.iconInactive} alt={item.iconName}
                                 width={79}
                                 height={60}
@@ -57,8 +57,6 @@ export default function HomeNavbarSidebar() {
                         </Link>
                     )
                 })}
-
-                <img src="/images/help-button.png" width={32} height={32} className="pt-24" />
             </div>
         </nav>
     )

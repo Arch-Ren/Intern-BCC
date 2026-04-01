@@ -1,9 +1,6 @@
 import HistoryCard from "@/components/Profile/history/historyItem"
 import HistorySection from "@/components/Profile/history/history"
-import {
-    dummyGrowthTrackerHistory,
-    dummyIntakesHistory,
-} from "@/data/LogHistory"
+import { dummyGrowthTrackerHistory, dummyIntakesHistory, } from "@/data/LogHistory"
 
 type HistoryItem = {
     id: string | number

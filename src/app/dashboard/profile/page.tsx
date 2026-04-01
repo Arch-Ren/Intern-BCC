@@ -6,7 +6,7 @@ import ProfileCard from "@/components/ProfileCard"
 import ChildProfileSection from "@/components/Profile/ChildProfileSection"
 import SavedEduhub from "@/components/Profile/savedEduhub"
 import HistorySection from "@/components/Profile/history/HistorySection"
-import DoctorScheduleSection from "@/components/Profile/doctorSection"
+import DoctorScheduleSection from "@/components/Profile/doctorScheduleSection"
 import { dummyDoctors } from "@/data/Doctor"
 import { dummyParent } from "@/data/Parent"
 import { dummyChildren } from "@/data/Children"
@@ -42,7 +42,7 @@ export default function ProfilePage() {
                             <HistorySection />
                         </div>
 
-                        <div className="col-span-4 min-h-0">
+                        <div className="col-span-4 min-h-0 bg-white rounded-2xl p-4">
                             <DoctorScheduleSection doctors={dummyDoctors.slice(0, 3)} />
                         </div>
                     </div>

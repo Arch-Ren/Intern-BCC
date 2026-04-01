@@ -1,5 +1,7 @@
+import DoctorSection from "@/components/connect/DoctorSection"
+
 export default function GConnect() {
-    return(
-        <div>ini g-connect</div>
+    return (
+        <DoctorSection />
     )
 }
