@@ -12,6 +12,18 @@ interface ChildProfileSectionProps {
     editMode?: "direct" | "info"
 }
 
+type ChildGender = "Laki-Laki" | "Perempuan"
+
+function normalizeGender(gender?: string): ChildGender {
+    const value = gender?.toLowerCase()
+
+    if (value === "laki-laki" || value === "laki laki" || value === "male") {
+        return "Laki-Laki"
+    }
+
+    return "Perempuan"
+}
+
 export default function ChildProfileSection({
     selectedIndex,
     onSelect,
@@ -33,21 +45,22 @@ export default function ChildProfileSection({
         setIsEditOpen(true)
     }
 
-    const activeChild =
-        activeIndex !== null && children[activeIndex]
-            ? {
-                id: children[activeIndex].id,
-                name: children[activeIndex].nama,
-                photo: (children[activeIndex] as any).photo || "/images/default-avatar.png",
-                birthDate: children[activeIndex].tanggal_lahir,
-                gender: children[activeIndex].gender,
-                age: children[activeIndex].umur ?? 0,
-                height: children[activeIndex].tinggi ?? 0,
-                weight: children[activeIndex].berat_badan ?? 0,
-                bloodType: children[activeIndex].golongan_darah ?? "-",
-                allergy: children[activeIndex].alergi ?? "-",
-            } as any
-            : null
+    const selectedChild = activeIndex !== null ? children[activeIndex] : null
+
+    const activeChild = selectedChild
+        ? {
+            id: selectedChild.id,
+            name: selectedChild.nama,
+            photo: (selectedChild as any).photo || "/images/default-avatar.png",
+            birthDate: selectedChild.tanggal_lahir,
+            gender: normalizeGender(selectedChild.gender),
+            age: selectedChild.umur ?? 0,
+            height: selectedChild.tinggi ?? 0,
+            weight: selectedChild.berat_badan ?? 0,
+            bloodType: selectedChild.golongan_darah ?? "-",
+            allergy: selectedChild.alergi ?? "-",
+        }
+        : null
 
     return (
         <>

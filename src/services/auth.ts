@@ -87,7 +87,7 @@ export function loginWithGoogleService() {
         throw new Error("Base URL API belum diset")
     }
 
-    window.location.href = `${baseUrl}/api/v1/auth/google`
+    window.location.href = `${baseUrl}/auth/google`
 }
 
 export function registerWithGoogleService() {
@@ -97,5 +97,5 @@ export function registerWithGoogleService() {
         throw new Error("Base URL API belum diset")
     }
 
-    window.location.href = `${baseUrl}/api/v1/auth/google`
+    window.location.href = `${baseUrl}/auth/google`
 }

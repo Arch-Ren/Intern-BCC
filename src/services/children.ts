@@ -6,13 +6,21 @@ export async function fetchChildrenService(token: string): Promise<Children[]> {
         headers: {
             Authorization: `Bearer ${token}`,
         },
+        cache: "no-store",
     })
 
-    const json = await res.json()
+    const text = await res.text()
+
+    let json
+    try {
+        json = JSON.parse(text)
+    } catch {
+        throw new Error("Response get anak bukan JSON")
+    }
 
     if (!res.ok) {
         throw new Error(json.message || "Gagal mengambil data anak")
     }
 
-    return json.data ?? []
+    return Array.isArray(json.data) ? json.data : []
 }

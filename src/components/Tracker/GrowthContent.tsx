@@ -20,7 +20,9 @@ type EditField = "height" | "weight" | "lila" | "head" | null
 export default function GrowthContent() {
     const { selectedChild: child } = useSelectedChild()
 
-    const age = calculateAge(child.birthDate)
+    if (!child) return null
+
+    const age = calculateAge(child.tanggal_lahir)
     const isToddler = age < 5
 
     const latestGrowthRecord = useMemo(() => {

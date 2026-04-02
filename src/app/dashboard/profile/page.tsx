@@ -12,9 +12,9 @@ import HistorySection from "@/components/Profile/history/HistorySection"
 import DoctorScheduleSection from "@/components/Profile/doctorScheduleSection"
 
 import { dummyDoctors } from "@/data/Doctor"
-import { dummyChildren } from "@/data/Children"
 
 import { useAuthStore } from "@/stores/auth"
+import { useChildrenStore } from "@/stores/children"
 
 export default function ProfilePage() {
     const router = useRouter()
@@ -24,18 +24,21 @@ export default function ProfilePage() {
     const fetchProfile = useAuthStore((state) => state.fetchProfile)
     const isLoadingProfile = useAuthStore((state) => state.isLoadingProfile)
 
+    const fetchChildren = useChildrenStore((state) => state.fetchChildren)
+    const clearChildren = useChildrenStore((state) => state.clearChildren)
+
     const [openEditParent, setOpenEditParent] = useState(false)
 
     useEffect(() => {
         if (!token) {
+            clearChildren()
             router.push("/signin")
             return
         }
 
-        if (!user) {
-            fetchProfile()
-        }
-    }, [token, user, fetchProfile, router])
+        fetchProfile()
+        fetchChildren()
+    }, [token, fetchProfile, fetchChildren, clearChildren, router])
 
     if (!token) {
         return null

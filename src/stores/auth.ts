@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
+import { useChildrenStore } from "@/stores/children"
 
 export type User = {
     id?: number | string
@@ -26,7 +27,12 @@ export const useAuthStore = create<AuthState>()(
             user: null,
             isLoadingProfile: false,
 
-            setAuth: ({ token, user }) => set({ token, user }),
+            setAuth: ({ token, user }) => {
+                // Clear data anak akun lama sebelum set akun baru
+                useChildrenStore.getState().clearChildren()
+
+                set({ token, user })
+            },
 
             setUser: (user) => set({ user }),
 
@@ -42,6 +48,7 @@ export const useAuthStore = create<AuthState>()(
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
+                        cache: "no-store",
                     })
 
                     const data = await res.json()
@@ -66,12 +73,15 @@ export const useAuthStore = create<AuthState>()(
                 }
             },
 
-            logout: () =>
+            logout: () => {
+                useChildrenStore.getState().clearChildren()
+
                 set({
                     token: null,
                     user: null,
                     isLoadingProfile: false,
-                }),
+                })
+            },
         }),
         {
             name: "auth-storage",

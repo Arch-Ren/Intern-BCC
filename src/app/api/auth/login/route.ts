@@ -13,10 +13,10 @@ export async function POST(req: NextRequest) {
 
         const body = await req.json()
 
-        console.log("LOGIN TARGET:", `${BASE_URL}/api/v1/auth/login`)
+        console.log("LOGIN TARGET:", `${BASE_URL}/auth/login`)
         console.log("LOGIN BODY:", body)
 
-        const res = await fetch(`${BASE_URL}/api/v1/auth/login`, {
+        const res = await fetch(`${BASE_URL}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

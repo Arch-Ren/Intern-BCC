@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { ActionButton } from "@/components/ui/Button/Action"
 import { loginService, loginWithGoogleService } from "@/services/auth"
 import { useAuthStore } from "@/stores/auth"
+import { useChildrenStore } from "@/stores/children"
 
 export default function SignIn() {
     const router = useRouter()
@@ -19,6 +20,7 @@ export default function SignIn() {
     const [error, setError] = useState("")
 
     const setAuth = useAuthStore((state) => state.setAuth)
+    const clearChildren = useChildrenStore((state) => state.clearChildren)
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -29,11 +31,15 @@ export default function SignIn() {
 
             const data = await loginService(email.trim(), password)
 
+            clearChildren()
+
             setAuth({
                 user: {
-                    name: data.user?.name || "User",
+                    id: (data.user as any)?.id,
+                    name: (data.user as any)?.name || (data.user as any)?.nama || "User",
                     email: data.user?.email || email.trim(),
                     photo: data.user?.photo,
+                    gender: (data.user as any)?.gender,
                 },
                 token: data.token,
             })
@@ -54,6 +60,7 @@ export default function SignIn() {
         setError("")
 
         try {
+            clearChildren()
             loginWithGoogleService()
         } catch (err) {
             if (err instanceof Error) {

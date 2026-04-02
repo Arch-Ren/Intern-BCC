@@ -22,10 +22,14 @@ export function SelectedChildProvider({ children: reactChildren }: { children: R
     const fetchChildren = useChildrenStore((state) => state.fetchChildren)
 
     useEffect(() => {
-        if (childrenData.length === 0 && !isLoading) {
-            fetchChildren()
-        }
-    }, [childrenData.length, isLoading, fetchChildren])
+        // fetch ulang saat mount
+        fetchChildren()
+    }, [])
+
+    // Reset selectedChildIndex ke 0 (ganti akun)
+    useEffect(() => {
+        setSelectedChildIndex(0)
+    }, [childrenData.length])
 
     const selectedChild = useMemo(
         () => childrenData[selectedChildIndex] ?? null,
