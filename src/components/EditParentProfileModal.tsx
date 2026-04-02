@@ -4,6 +4,7 @@ import { ActionButton } from "./ui/Button/Action"
 import EditProfileModal from "./EditProfileModal"
 
 type ParentType = {
+    id?: string | number
     name: string
     photo: string
     username?: string

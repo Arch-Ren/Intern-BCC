@@ -1,7 +1,8 @@
-'use client'
+"use client"
 
-import { useEffect, useMemo, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useMemo, useState } from "react"
+import { useRequireAuth } from "@/hooks/useRequireAuth"
+import { useAuthStore } from "@/stores/auth"
 import Image from "next/image"
 
 import { LinkButton } from "@/components/ui/Button/Link"
@@ -23,7 +24,10 @@ import { calculateBMI, getBMICategory } from "@/utils/bmi"
 import { getLatestGrowthRecord } from "@/utils/growth"
 
 export default function Dashboard() {
-    const router = useRouter()
+    useRequireAuth()
+
+    const user = useAuthStore((state) => state.user)
+    const isLoadingProfile = useAuthStore((state) => state.isLoadingProfile)
 
     const [selectedArticle, setSelectedArticle] = useState<EduHub | null>(null)
     const [isProfilModalOpen, setIsProfileModalOpen] = useState(false)
@@ -32,11 +36,11 @@ export default function Dashboard() {
     const featuredArticle = dummyEduhub[0]
     const { selectedChild, selectedChildIndex, setSelectedChildIndex } = useSelectedChild()
 
-    const age = calculateAge(selectedChild.birthDate)
+    const age = useMemo(() => selectedChild ? calculateAge(selectedChild.tanggal_lahir) : 0, [selectedChild?.tanggal_lahir])
 
-    const latestGrowthRecord = getLatestGrowthRecord(
-        selectedChild.id,
-        dummyGrowthRecords
+    const latestGrowthRecord = useMemo(
+        () => selectedChild ? getLatestGrowthRecord(selectedChild.id, dummyGrowthRecords) : null,
+        [selectedChild?.id]
     )
 
     const bmiNumber = latestGrowthRecord
@@ -45,16 +49,10 @@ export default function Dashboard() {
 
     const bmiLabel = bmiNumber !== null ? getBMICategory(bmiNumber) : "-"
 
-    useEffect(() => {
-        const user = localStorage.getItem("user")
-        if (!user) {
-            router.push("/signin")
-        }
-    }, [router])
-
     function openEDuhub(article: EduHub) {
         setSelectedArticle(article)
     }
+
     function closeEduhub() {
         setSelectedArticle(null)
     }
@@ -62,6 +60,7 @@ export default function Dashboard() {
     function openProfileModal() {
         setIsProfileModalOpen(true)
     }
+
     function closeProfileModal() {
         setIsProfileModalOpen(false)
     }
@@ -71,11 +70,21 @@ export default function Dashboard() {
         closeProfileModal()
     }
 
+    if (isLoadingProfile && !user) {
+        return <div className="p-6">Memuat dashboard...</div>
+    }
+
     return (
         <>
+            <div className="mb-4">
+                <h1 className="text-2xl font-bold">
+                    Halo, {user?.name || "User"}
+                </h1>
+                <p className="text-sm text-gray-500">{user?.email || "-"}</p>
+            </div>
+
             <div className="grid grid-cols-3 gap-4 items-stretch">
                 <div className="col-span-2 flex flex-col items-center gap-4 h-full">
-
                     <section className="grid w-full grid-cols-[1fr_1.6fr_1fr] gap-4">
                         {data.map((item) => (
                             <IntakesCard key={item.label} {...item} />
@@ -86,8 +95,17 @@ export default function Dashboard() {
                         <div className="flex justify-between">
                             <h2 className="text-4xl text-white font-bold tracking-wider">Status BMI</h2>
                             <div className="flex flex-col items-end gap-3">
-                                <p className="text-4xl font-bold tracking-wider text-end text-[#00ff44] min-w-[158px]">{bmiLabel}</p>
-                                <LinkButton href="/dashboard/tracker" className="py-2 max-h-[43px] min-w-[158px]" variant="secondary" rounded="xsm">Ubah Data</LinkButton>
+                                <p className="text-4xl font-bold tracking-wider text-end text-[#00ff44] min-w-[158px]">
+                                    {bmiLabel}
+                                </p>
+                                <LinkButton
+                                    href="/dashboard/tracker"
+                                    className="py-2 max-h-[43px] min-w-[158px]"
+                                    variant="secondary"
+                                    rounded="xsm"
+                                >
+                                    Ubah Data
+                                </LinkButton>
                             </div>
                         </div>
                     </section>
@@ -96,14 +114,16 @@ export default function Dashboard() {
                         <div className="flex gap-3 pb-4">
                             <h2 className="font-semibold text-2xl">Beli Sekarang</h2>
                             <Image
-                                src="/images/arrow-right.png" alt="arrow"
+                                src="/images/arrow-right.png"
+                                alt="arrow"
                                 width={30}
                                 height={30}
                                 className="mt-1"
                             />
                         </div>
                         <Image
-                            src="/images/ad.png" alt="ad"
+                            src="/images/ad.png"
+                            alt="ad"
                             width={0}
                             height={0}
                             sizes="100vw"
@@ -111,18 +131,16 @@ export default function Dashboard() {
                         />
                     </a>
 
-                    <EduhubSection
-                        article={featuredArticle}
-                        onReadMore={openEDuhub}
-                    />
+                    <EduhubSection article={featuredArticle} onReadMore={openEDuhub} />
                 </div>
 
                 <div className="flex h-full flex-col gap-4">
                     <ProfileCard
-                        name={selectedChild.name}
-                        image={selectedChild.photo}
-                        gender={selectedChild.gender}
-                        age={age}
+                        isEmpty={!selectedChild}
+                        name={selectedChild?.nama || "-"}
+                        image={(selectedChild as any)?.photo || "/images/default-avatar.png"}
+                        gender={selectedChild?.gender || "-"}
+                        age={selectedChild ? age : "-"}
                         type="child"
                         onChangeProfile={openProfileModal}
                     />

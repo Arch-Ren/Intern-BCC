@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { dummyChildren } from "@/data/Children"
+import { useChildrenStore } from "@/stores/children"
 import EditChildProfileModal from "../EditChildProfileModal"
 import ChildInfoModal from "../ChildInfoModal"
 import ChildProfileList from "../ChildProfileList"
@@ -17,6 +17,7 @@ export default function ChildProfileSection({
     onSelect,
     editMode = "direct",
 }: ChildProfileSectionProps) {
+    const children = useChildrenStore((state) => state.children)
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
     const [isInfoOpen, setIsInfoOpen] = useState(false)
     const [isEditOpen, setIsEditOpen] = useState(false)
@@ -33,15 +34,19 @@ export default function ChildProfileSection({
     }
 
     const activeChild =
-        activeIndex !== null
+        activeIndex !== null && children[activeIndex]
             ? {
-                ...dummyChildren[activeIndex],
-                age: 7,
-                height: 114,
-                weight: 24,
-                bloodType: "AB",
-                allergy: "-",
-            }
+                id: children[activeIndex].id,
+                name: children[activeIndex].nama,
+                photo: (children[activeIndex] as any).photo || "/images/default-avatar.png",
+                birthDate: children[activeIndex].tanggal_lahir,
+                gender: children[activeIndex].gender,
+                age: children[activeIndex].umur ?? 0,
+                height: children[activeIndex].tinggi ?? 0,
+                weight: children[activeIndex].berat_badan ?? 0,
+                bloodType: children[activeIndex].golongan_darah ?? "-",
+                allergy: children[activeIndex].alergi ?? "-",
+            } as any
             : null
 
     return (

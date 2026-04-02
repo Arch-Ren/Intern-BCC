@@ -1,24 +1,27 @@
 import Image from "next/image"
 import { ActionButton } from "./ui/Button/Action"
 
-type ProfileCardProps =
-    | {
-        type: "parent"
-        name: string
-        image: string
-        role: string
-        onChangeProfile: () => void
-        layout?: "default" | "compact" | "stretch"
-    }
-    | {
-        type: "child"
-        name: string
-        image: string
-        gender: "Laki-Laki" | "Perempuan"
-        age: number
-        onChangeProfile: () => void
-        layout?: "default" | "compact" | "stretch"
-    }
+type ParentProfileCardProps = {
+    type: "parent"
+    name: string
+    image?: string
+    role?: string
+    onChangeProfile: () => void
+    layout?: "default" | "compact" | "stretch"
+}
+
+type ChildProfileCardProps = {
+    type: "child"
+    name: string
+    image?: string
+    gender?: "Laki-Laki" | "Perempuan" | string
+    age?: number | string
+    onChangeProfile: () => void
+    layout?: "default" | "compact" | "stretch"
+    isEmpty?: boolean
+}
+
+type ProfileCardProps = ParentProfileCardProps | ChildProfileCardProps
 
 export default function ProfileCard(props: ProfileCardProps) {
     const layout = props.layout ?? "default"
@@ -36,26 +39,48 @@ export default function ProfileCard(props: ProfileCardProps) {
             : { width: 209, height: 283 }
 
     const buttonMarginClass = layout === "compact" ? "mt-8" : "mt-12"
+    const imageSrc = props.image || "/images/default-avatar.png"
+    const displayName = props.name || "Pengguna"
+
+    if (props.type === "child" && props.isEmpty) {
+        return (
+            <section className={sectionClass}>
+                <div className="flex flex-col items-center justify-center gap-4 px-6 py-8 text-center h-full">
+                    <p className="text-xl font-semibold text-gray-500">Data anak belum tersedia</p>
+                    <ActionButton
+                        variant="primary"
+                        rounded="xsm"
+                        className={`${buttonMarginClass} font-semibold tracking-wider min-w-[200px]`}
+                        onClick={props.onChangeProfile}
+                    >
+                        Tambah Profil
+                    </ActionButton>
+                </div>
+            </section>
+        )
+    }
 
     return (
         <section className={sectionClass}>
             <div className="flex flex-col items-center gap-2 px-6 py-8 text-center">
                 <Image
-                    src={props.image}
-                    alt={props.name}
+                    src={imageSrc}
+                    alt={displayName}
                     width={imageSize.width}
                     height={imageSize.height}
                     className="mb-4 rounded-xl object-cover"
                 />
 
-                <p className="text-3xl font-bold">{props.name}</p>
+                <p className="text-3xl font-bold">{displayName}</p>
 
                 {props.type === "parent" ? (
-                    <p className="text-2xl">{props.role}</p>
+                    <p className="text-2xl">{props.role || "Parent"}</p>
                 ) : (
                     <>
-                        <p className="text-2xl">{props.gender}</p>
-                        <p className="text-2xl">{props.age} Tahun</p>
+                        <p className="text-2xl">{props.gender || "-"}</p>
+                        <p className="text-2xl">
+                            {props.age !== undefined && props.age !== null ? `${props.age} Tahun` : "-"}
+                        </p>
                     </>
                 )}
 
