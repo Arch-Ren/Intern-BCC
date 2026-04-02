@@ -146,9 +146,7 @@ export default function ChatDoctorPageContent() {
     return (
         <section className="h-screen overflow-hidden bg-[#edf6f3] p-6">
             <div className="mx-auto grid h-full max-w-[1500px] grid-cols-[320px_1fr_320px] overflow-hidden rounded-[28px] bg-[#edf6f3] shadow-sm">
-                {/* LEFT SIDEBAR */}
                 <aside className="flex h-full min-h-0 flex-col bg-[#edf6f3] p-6">
-                    {/* LOGO */}
                     <div className="mb-6 flex items-center gap-2">
                         <img
                             src="/images/geazy-logo-nobg.png"
@@ -157,7 +155,6 @@ export default function ChatDoctorPageContent() {
                         />
                     </div>
 
-                    {/* SEARCH */}
                     <div className="mb-5 flex items-center gap-3 rounded-full bg-white px-4 py-3 text-slate-400 shadow-sm">
                         <Search className="h-5 w-5" />
                         <input
@@ -166,29 +163,20 @@ export default function ChatDoctorPageContent() {
                         />
                     </div>
 
-                    {/* HEADER */}
                     <div className="mb-4 flex items-end justify-between">
-                        <h2 className="text-2xl font-semibold text-[#1589a0] leading-tight">
-                            Hari Ini
-                        </h2>
-                        <span className="text-sm text-slate-500">
-                            Senin, 2 Juli 2026
-                        </span>
+                        <h2 className="leading-tight text-2xl font-semibold text-[#1589a0]">Hari Ini</h2>
+                        <span className="text-sm text-slate-500">Senin, 2 Juli 2026</span>
                     </div>
 
-                    {/* LIST */}
                     <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
                         {chatList.map((item) => (
                             <button
                                 key={item.id}
                                 type="button"
-                                className={`w-full rounded-2xl px-4 py-3 text-left shadow-sm transition ${item.active
-                                    ? "bg-[#16879b] text-white"
-                                    : "bg-white text-slate-700"
+                                className={`w-full rounded-2xl px-4 py-3 text-left shadow-sm transition ${item.active ? "bg-[#16879b] text-white" : "bg-white text-slate-700"
                                     }`}
                             >
                                 <div className="flex items-center gap-3">
-                                    {/* AVATAR */}
                                     <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-slate-200">
                                         <img
                                             src={item.avatar}
@@ -197,25 +185,17 @@ export default function ChatDoctorPageContent() {
                                         />
                                     </div>
 
-                                    {/* CONTENT */}
                                     <div className="min-w-0 flex-1">
                                         <div className="flex items-center justify-between">
-                                            <h3 className="truncate text-sm font-semibold">
-                                                {item.name}
-                                            </h3>
-                                            <span className="text-xs opacity-70">
-                                                {item.time}
-                                            </span>
+                                            <h3 className="truncate text-sm font-semibold">{item.name}</h3>
+                                            <span className="text-xs opacity-70">{item.time}</span>
                                         </div>
 
-                                        <p className="mt-1 truncate text-xs opacity-80">
-                                            {item.preview}
-                                        </p>
+                                        <p className="mt-1 truncate text-xs opacity-80">{item.preview}</p>
                                     </div>
 
-                                    {/* UNREAD */}
                                     {item.unread ? (
-                                        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] text-[#16879b] font-bold">
+                                        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-bold text-[#16879b]">
                                             {item.unread}
                                         </div>
                                     ) : null}
@@ -225,7 +205,6 @@ export default function ChatDoctorPageContent() {
                     </div>
                 </aside>
 
-                {/* CENTER CHAT */}
                 <main className="flex h-full min-h-0 flex-col bg-white p-6">
                     <div className="mb-4 flex items-center justify-between border-b border-slate-300 pb-4">
                         <div className="flex items-center gap-4">
@@ -234,9 +213,7 @@ export default function ChatDoctorPageContent() {
                                 alt="Phupu Tana"
                                 className="h-14 w-14 rounded-full object-cover"
                             />
-                            <h1 className="text-[22px] font-semibold text-slate-700">
-                                Phupu Tana
-                            </h1>
+                            <h1 className="text-[22px] font-semibold text-slate-700">Phupu Tana</h1>
                         </div>
 
                         <div className="flex items-center gap-4 text-slate-500">
@@ -254,8 +231,8 @@ export default function ChatDoctorPageContent() {
                                 >
                                     <div
                                         className={`max-w-[72%] rounded-[18px] px-5 py-4 text-sm leading-relaxed ${message.sender === "doctor"
-                                            ? "bg-[#16879b] text-white"
-                                            : "bg-[#f2f2f2] text-slate-700"
+                                                ? "bg-[#16879b] text-white"
+                                                : "bg-[#f2f2f2] text-slate-700"
                                             }`}
                                     >
                                         {message.text}
@@ -287,9 +264,7 @@ export default function ChatDoctorPageContent() {
                     </div>
                 </main>
 
-                {/* RIGHT SIDEBAR */}
                 <aside className="flex h-full min-h-0 flex-col bg-[#edf6f3] px-6 py-8">
-                    {/* Doctor Profile */}
                     <div className="mb-8 text-center">
                         <div className="mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full bg-white shadow-sm md:h-28 md:w-28">
                             <img
@@ -308,7 +283,6 @@ export default function ChatDoctorPageContent() {
                         </p>
                     </div>
 
-                    {/* Schedule */}
                     <div className="min-h-0 flex-1">
                         <h3 className="mb-4 text-[20px] font-semibold text-slate-800 md:text-[22px]">
                             Jadwal
@@ -316,12 +290,8 @@ export default function ChatDoctorPageContent() {
 
                         <div className="space-y-3 overflow-y-auto pr-1">
                             {doctorSchedules.map((item) => (
-                                <div
-                                    key={item.id}
-                                    className="rounded-2xl bg-white p-3 shadow-sm"
-                                >
+                                <div key={item.id} className="rounded-2xl bg-white p-3 shadow-sm">
                                     <div className="flex items-center gap-3">
-                                        {/* Time Box */}
                                         <div className="flex w-[72px] shrink-0 flex-col items-center justify-center rounded-xl bg-[#edf3f1] px-2 py-2">
                                             <span className="text-[10px] leading-none text-slate-400">
                                                 {item.dayLabel}
@@ -331,20 +301,16 @@ export default function ChatDoctorPageContent() {
                                             </span>
                                         </div>
 
-                                        {/* Patient Info */}
                                         <div className="min-w-0 flex-1">
                                             <p className="truncate text-[14px] font-semibold text-slate-800 md:text-[15px]">
                                                 {item.patientName}
                                             </p>
-                                            <p className="text-[12px] text-slate-400 md:text-[13px]">
-                                                {item.age}
-                                            </p>
+                                            <p className="text-[12px] text-slate-400 md:text-[13px]">{item.age}</p>
                                             <p className={`text-[12px] font-medium md:text-[13px] ${item.statusColor}`}>
                                                 {item.status}
                                             </p>
                                         </div>
 
-                                        {/* Actions */}
                                         <div className="flex shrink-0 flex-col gap-2">
                                             <button
                                                 type="button"
