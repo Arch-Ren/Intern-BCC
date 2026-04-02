@@ -50,7 +50,6 @@ export default function PaymentPageContent() {
 
     const sessionFee = 150000
     const serviceFee = 2500
-
     const total = useMemo(() => sessionFee + serviceFee, [])
 
     const selectedDoctor: Doctor = useMemo(() => {
@@ -78,12 +77,9 @@ export default function PaymentPageContent() {
                 </div>
 
                 <div className="grid h-[calc(100%-40px)] grid-cols-1 gap-4 lg:grid-cols-[1.4fr_1fr]">
-                    {/* LEFT */}
                     <div className="min-h-0 rounded-[28px] bg-[#F1FFFB] p-6">
                         <div className="h-full overflow-y-auto p-5">
-                            <h2 className="mb-4 text-2xl font-bold text-slate-700">
-                                Pilih Pasien
-                            </h2>
+                            <h2 className="mb-4 text-2xl font-bold text-slate-700">Pilih Pasien</h2>
 
                             <div className="space-y-3">
                                 {patients.map((patient) => {
@@ -97,21 +93,15 @@ export default function PaymentPageContent() {
                                             className="flex w-full items-center justify-between rounded-2xl bg-white px-4 py-4 text-left shadow-sm"
                                         >
                                             <div>
-                                                <p className="font-semibold text-slate-700">
-                                                    {patient.name}
-                                                </p>
-                                                <p className="text-sm text-slate-500">
-                                                    {patient.relation}
-                                                </p>
+                                                <p className="font-semibold text-slate-700">{patient.name}</p>
+                                                <p className="text-sm text-slate-500">{patient.relation}</p>
                                             </div>
 
                                             <div
                                                 className={`flex h-7 w-7 items-center justify-center rounded-full border-4 ${active ? "border-emerald-400" : "border-slate-300"
                                                     }`}
                                             >
-                                                {active && (
-                                                    <div className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-                                                )}
+                                                {active && <div className="h-2.5 w-2.5 rounded-full bg-emerald-400" />}
                                             </div>
                                         </button>
                                     )
@@ -129,41 +119,30 @@ export default function PaymentPageContent() {
                                 <div className="mt-6 space-y-3 text-slate-700">
                                     <div className="flex items-center justify-between">
                                         <span>Biaya sesi 1 Jam</span>
-                                        <span className="text-emerald-500">
-                                            {formatRupiah(sessionFee)}
-                                        </span>
+                                        <span className="text-emerald-500">{formatRupiah(sessionFee)}</span>
                                     </div>
 
                                     <div className="flex items-center justify-between">
                                         <span>Biaya Layanan</span>
-                                        <span className="text-emerald-500">
-                                            {formatRupiah(serviceFee)}
-                                        </span>
+                                        <span className="text-emerald-500">{formatRupiah(serviceFee)}</span>
                                     </div>
 
                                     <div className="flex items-center justify-between text-2xl font-semibold">
                                         <span>Pembayaranmu</span>
-                                        <span className="text-emerald-500">
-                                            {formatRupiah(total)}
-                                        </span>
+                                        <span className="text-emerald-500">{formatRupiah(total)}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* RIGHT */}
                     <div className="flex min-h-0 flex-col rounded-[28px] bg-[#F1FFFB] p-5">
-                        <h2 className="mb-4 text-2xl font-bold text-slate-700">
-                            Metode Pembayaran
-                        </h2>
+                        <h2 className="mb-4 text-2xl font-bold text-slate-700">Metode Pembayaran</h2>
 
                         <div className="rounded-2xl bg-white p-5 shadow-lg">
                             <div className="space-y-5">
                                 <div>
-                                    <p className="mb-3 font-semibold text-slate-700">
-                                        Metode Pembayaran
-                                    </p>
+                                    <p className="mb-3 font-semibold text-slate-700">Metode Pembayaran</p>
 
                                     <button
                                         type="button"
@@ -180,9 +159,7 @@ export default function PaymentPageContent() {
                                         </div>
 
                                         <div
-                                            className={`flex h-7 w-7 items-center justify-center rounded-full border-4 ${selectedPayment === "qris"
-                                                    ? "border-slate-500"
-                                                    : "border-slate-300"
+                                            className={`flex h-7 w-7 items-center justify-center rounded-full border-4 ${selectedPayment === "qris" ? "border-slate-500" : "border-slate-300"
                                                 }`}
                                         >
                                             {selectedPayment === "qris" && (
@@ -193,9 +170,7 @@ export default function PaymentPageContent() {
                                 </div>
 
                                 <div>
-                                    <p className="mb-3 font-semibold text-slate-700">
-                                        E-Wallet
-                                    </p>
+                                    <p className="mb-3 font-semibold text-slate-700">E-Wallet</p>
 
                                     <div className="space-y-3">
                                         {paymentMethods
@@ -213,9 +188,7 @@ export default function PaymentPageContent() {
                                                             alt={method.name}
                                                             className="h-10 w-10 rounded-xl object-cover"
                                                         />
-                                                        <span className="font-medium text-slate-800">
-                                                            {method.name}
-                                                        </span>
+                                                        <span className="font-medium text-slate-800">{method.name}</span>
                                                     </div>
 
                                                     <div

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { Box, Button, Paper, IconButton } from "@mui/material";
+import axios from "axios";
 
 import { ChildFormValues } from "@/components/AddChildProfile/AddChildTypes";
 import StepSidebar from "@/components/AddChildProfile/StepSidebar";
@@ -72,13 +73,41 @@ export default function ChildProfilePage() {
         router.push("/dashboard");
     };
 
-    const onSubmit: SubmitHandler<ChildFormValues> = (data) => {
+    const onSubmit: SubmitHandler<ChildFormValues> = async (data) => {
         if (activeStep !== steps.length - 1) return;
 
-        console.log("FINAL DATA:", data);
-        alert("Data berhasil disubmit");
+        try {
+            const tanggal_lahir = new Date(
+                Number(data.tahun),
+                Number(data.bulan) - 1,
+                Number(data.tanggal)
+            ).toISOString();
 
-        router.push("/dashboard");
+            const payload = {
+                nama: data.nama,
+                tanggal_lahir,
+                tinggi: parseFloat(data.tinggi),
+                berat_badan: parseFloat(data.berat),
+                gender: data.jenisKelamin.toLowerCase(), // penting
+                anakKe: Number(data.anakKe),
+                lingkar_kepala: data.lingkarKepala ? parseFloat(data.lingkarKepala) : null,
+                lingkar_lengan: data.lila ? parseFloat(data.lila) : null,
+                golongan_darah: data.golDarah,
+                alergi: data.alergi,
+                riwayat_penyakit: data.penyakit,
+            };
+
+            console.log("PAYLOAD:", payload);
+
+            await axios.post("/anak", payload);
+
+            alert("Data berhasil disubmit");
+            router.push("/dashboard");
+
+        } catch (err) {
+            console.error(err);
+            alert("Gagal kirim data");
+        }
     };
 
     const renderStepForm = () => {
