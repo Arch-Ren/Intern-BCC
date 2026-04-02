@@ -1,7 +1,7 @@
-import { dummyFoods } from "@/data/Food";
+import { FoodItem } from "@/data/Food";
 
 export type NutrientLogView = "summary" | "picker" | "selected";
 
-export type SelectedFood = (typeof dummyFoods)[number] & {
+export type SelectedFood = FoodItem & {
   gram: number;
 };

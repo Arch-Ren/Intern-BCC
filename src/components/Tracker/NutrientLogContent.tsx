@@ -1,9 +1,9 @@
 'use client'
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { dummyFoods, FoodItem } from "@/data/Food";
-
+import { getFoods } from "@/lib/api/food";
+import { FoodItem } from "@/data/Food";
 import NutrientLogSummary from "./NutrientLogSummary";
 import NutrientLogPicker from "./NutrientLogPicker";
 import NutrientLogSelected from "./NutrientLogSelected";
@@ -12,24 +12,32 @@ import type { NutrientLogView, SelectedFood } from "./nutrientLog.types";
 
 export default function NutrientLogContent() {
     const [view, setView] = useState<NutrientLogView>("summary");
-    const [search, setSearch] = useState("");
     const [selectedFoods, setSelectedFoods] = useState<SelectedFood[]>([]);
+    const [foods, setFoods] = useState<FoodItem[]>([]);
+    const [loading, setLoading] = useState(false);
 
-    const filteredFoods = useMemo(() => {
-        return dummyFoods.filter((food) =>
-        food.name.toLowerCase().includes(search.toLowerCase())
-        );
-    }, [search]);
+    useEffect(() => {
+        const fetchFoods = async () => {
+            try {
+                setLoading(true);
+                const data = await getFoods();
+                setFoods(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const handleAddFood = (food: FoodItem) => {
-        const exists = selectedFoods.some((item) => item.id === food.id);
-        if (exists) return;
+        fetchFoods();
+    }, []);
 
-        setSelectedFoods((prev) => [...prev, { ...food, gram: 0 }]);
+    const handleFoodsPicked = (foods: SelectedFood[]) => {
+        setSelectedFoods(foods);
         setView("selected");
     };
 
-    const handleRemoveFood = (foodId: number) => {
+    const handleRemoveFood = (foodId: string) => {
         const updated = selectedFoods.filter((item) => item.id !== foodId);
         setSelectedFoods(updated);
 
@@ -38,16 +46,19 @@ export default function NutrientLogContent() {
         }
     };
 
-    const handleGramChange = (foodId: number, value: number) => {
-        setSelectedFoods((prev) =>prev.map((item) => item.id === foodId ? { ...item, gram: value } : item));
+    const handleGramChange = (foodId: string, value: number) => {
+        setSelectedFoods((prev) =>
+            prev.map((item) =>
+                item.id === foodId ? { ...item, gram: value } : item
+            )
+        );
     };
 
-    const handleSave = () => {
+    const handleFinalSave = () => {
         console.log("saved:", selectedFoods);
 
         setSelectedFoods([]);
         setView("summary");
-        setSearch("");
     };
 
     return (
@@ -57,28 +68,16 @@ export default function NutrientLogContent() {
             )}
 
             {view === "picker" && (
-                <NutrientLogPicker
-                    search={search}
-                    onSearchChange={setSearch}
-                    filteredFoods={filteredFoods}
-                    selectedFoods={selectedFoods}
-                    onAddFood={handleAddFood}
-                    onRemoveFood={handleRemoveFood}
-                    onSave={handleSave}
-                />
+                <NutrientLogPicker foods={foods} onSave={handleFoodsPicked} />
             )}
 
             {view === "selected" && (
                 <NutrientLogSelected
-                    search={search}
-                    onSearchChange={setSearch}
-                    filteredFoods={filteredFoods}
                     selectedFoods={selectedFoods}
-                    onAddFood={handleAddFood}
                     onRemoveFood={handleRemoveFood}
                     onGramChange={handleGramChange}
                     onBackToPicker={() => setView("picker")}
-                    onSave={handleSave}
+                    onSave={handleFinalSave}
                 />
             )}
         </>
