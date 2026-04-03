@@ -1,4 +1,5 @@
 import { FoodItem } from "@/data/Food";
+import { useAuthStore } from "@/stores/auth";
 
 type ApiFood = {
     id: string;
@@ -13,14 +14,16 @@ type ApiResponse = {
     data: ApiFood[];
 };
 
-export async function getFoods(): Promise<FoodItem[]> {
-    const token = localStorage.getItem("token");
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
-    const res = await fetch("YOUR_BASE_URL/makanan", {
+export async function getFoods(): Promise<FoodItem[]> {
+    const token = useAuthStore.getState().token;
+
+    const res = await fetch("/api/makanan", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            ...(token && { Authorization: `Bearer ${token}` }),
         },
     });
 

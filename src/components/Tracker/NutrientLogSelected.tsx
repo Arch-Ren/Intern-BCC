@@ -1,4 +1,3 @@
-import { Button } from "../ui/button";
 import { ActionButton } from "../ui/Button/Action";
 
 import type { Makanan } from "@/services/makanan";
@@ -17,11 +16,7 @@ type NutrientLogSelectedProps = {
 };
 
 export default function NutrientLogSelected({
-    search,
-    onSearchChange,
-    filteredFoods,
     selectedFoods,
-    onAddFood,
     onRemoveFood,
     onGramChange,
     onBackToPicker,
@@ -29,7 +24,9 @@ export default function NutrientLogSelected({
 }: NutrientLogSelectedProps) {
     return (
         <div className="bg-white w-full flex flex-col rounded-2xl border border-black overflow-hidden p-4">
-            <p className="text-2xl font-bold text-color4 p-4 border-b border-black w-full text-center">Pencatatan hari ini</p>
+            <p className="text-2xl font-bold text-color4 p-4 border-b border-black w-full text-center">
+                Pencatatan hari ini
+            </p>
 
             <div className="p-4 flex flex-col gap-4">
                 <div className="flex gap-3">
@@ -75,7 +72,8 @@ export default function NutrientLogSelected({
                         {selectedFoods.map((food) => (
                             <div
                                 key={food.id}
-                                className="flex items-center justify-between bg-[#F1FFFB] gap-3 rounded-xl border px-4 py-3 max-w-[600px]">
+                                className="flex items-center justify-between bg-[#F1FFFB] gap-3 rounded-xl border px-4 py-3 max-w-[600px]"
+                            >
                                 <div className="flex items-center gap-4">
                                     <img src={"/images/default-food.png"} alt={food.nama} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
                                     <span>{food.nama}</span>
@@ -86,10 +84,20 @@ export default function NutrientLogSelected({
                                         type="number"
                                         min={0}
                                         value={food.gram}
-                                        onChange={(e) => onGramChange(food.id, Number(e.target.value))}
+                                        onChange={(e) =>
+                                            onGramChange(food.id, Number(e.target.value))
+                                        }
                                         className="w-28 rounded-lg border px-3 py-2"
                                     />
                                     <span className="font-medium">gram</span>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => onRemoveFood(food.id)}
+                                        className="text-lg font-bold text-white bg-primary px-3 py-2 rounded-md"
+                                    >
+                                        -
+                                    </button>
                                 </div>
                             </div>
                         ))}
