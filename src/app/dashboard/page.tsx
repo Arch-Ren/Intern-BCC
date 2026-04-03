@@ -16,8 +16,9 @@ import ProfileSwitchModal from "@/components/ChildProfileSwitchModal"
 import { useSelectedChild } from "@/context/SelectedChild"
 import { useChildrenStore } from "@/stores/children"
 
-import { dummyEduhub, EduHub } from "@/data/Eduhub"
+import { EduHub } from "@/data/Eduhub"
 import { dummyGrowthRecords } from "@/data/GrowthRecord"
+import { fetchInformasi } from "@/services/informasi"
 
 import { getLatestGrowthRecord } from "@/utils/growth"
 import { fetchNutrisiHarian, type NutrisiHarian } from "@/services/nutrisi"
@@ -32,8 +33,8 @@ export default function Dashboard() {
     const [isProfilModalOpen, setIsProfileModalOpen] = useState(false)
     const [nutrisi, setNutrisi] = useState<NutrisiHarian | null>(null)
     const [isLoadingNutrisi, setIsLoadingNutrisi] = useState(false)
+    const [featuredArticle, setFeaturedArticle] = useState<EduHub | null>(null)
 
-    const featuredArticle = dummyEduhub[0]
     const { selectedChild, selectedChildIndex, setSelectedChildIndex } = useSelectedChild()
 
     const age = selectedChild?.umur
@@ -44,6 +45,29 @@ export default function Dashboard() {
     )
 
     const bmiLabel = selectedChild?.status
+
+    // Fetch informasi for Eduhub section
+    useEffect(() => {
+        let cancelled = false;
+        fetchInformasi()
+            .then((data) => {
+                if (!cancelled && data.length > 0) {
+                    const firstItem = data[0];
+                    setFeaturedArticle({
+                        id: Number(firstItem.id) || 0,
+                        title: firstItem.judul,
+                        picture: `/images/eduhub1.jpg`,
+                        summary: firstItem.ringkasan,
+                        content: firstItem.ringkasan,
+                    })
+                }
+            })
+            .catch((err) => {
+                console.error("Gagal load informasi dashboard:", err)
+            });
+
+        return () => { cancelled = true; }
+    }, [])
 
     // Fetch nutrisi harian when selected child changes
     useEffect(() => {
