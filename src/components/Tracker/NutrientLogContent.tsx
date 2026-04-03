@@ -1,9 +1,6 @@
 'use client'
 
 import { useEffect, useMemo, useState } from "react";
-
-import { getFoods } from "@/lib/api/food";
-import { FoodItem } from "@/data/Food";
 import NutrientLogSummary from "./NutrientLogSummary";
 import NutrientLogPicker from "./NutrientLogPicker";
 import NutrientLogSelected from "./NutrientLogSelected";
@@ -18,6 +15,7 @@ export default function NutrientLogContent() {
     const [selectedFoods, setSelectedFoods] = useState<SelectedFood[]>([]);
     const [foods, setFoods] = useState<Makanan[]>([]);
     const [isLoadingFoods, setIsLoadingFoods] = useState(false);
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         let isCancelled = false;
@@ -106,16 +104,28 @@ export default function NutrientLogContent() {
             )}
 
             {view === "picker" && (
-                <NutrientLogPicker foods={foods} onSave={handleFoodsPicked} />
+                <NutrientLogPicker 
+                    search={search}
+                    onSearchChange={setSearch}
+                    filteredFoods={filteredFoods}
+                    selectedFoods={selectedFoods}
+                    onAddFood={handleAddFood}
+                    onRemoveFood={handleRemoveFood}
+                    onSave={() => setView("selected")}
+                />
             )}
 
             {view === "selected" && (
                 <NutrientLogSelected
+                    search={search}
+                    onSearchChange={setSearch}
+                    filteredFoods={filteredFoods}
                     selectedFoods={selectedFoods}
+                    onAddFood={handleAddFood}
                     onRemoveFood={handleRemoveFood}
                     onGramChange={handleGramChange}
                     onBackToPicker={() => setView("picker")}
-                    onSave={handleFinalSave}
+                    onSave={handleSave}
                 />
             )}
         </>

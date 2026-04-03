@@ -1,4 +1,5 @@
 import { ActionButton } from "../ui/Button/Action";
+import { Button } from "../ui/button";
 
 import type { Makanan } from "@/services/makanan";
 import type { SelectedFood } from "./nutrientLog.types";
@@ -16,7 +17,11 @@ type NutrientLogSelectedProps = {
 };
 
 export default function NutrientLogSelected({
+    search,
+    onSearchChange,
+    filteredFoods,
     selectedFoods,
+    onAddFood,
     onRemoveFood,
     onGramChange,
     onBackToPicker,
