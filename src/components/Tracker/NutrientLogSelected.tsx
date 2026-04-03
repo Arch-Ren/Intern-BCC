@@ -53,11 +53,11 @@ export default function NutrientLogSelected({
                                 key={food.id}
                                 type="button"
                                 onClick={() => {
-                                   if (isSelected) {
-                                      onRemoveFood(food.id);
-                                  } else {
-                                      onAddFood(food);
-                                  }
+                                    if (isSelected) {
+                                        onRemoveFood(food.id);
+                                    } else {
+                                        onAddFood(food);
+                                    }
                                 }}
                                 className={`flex items-center justify-between min-w-[400px] rounded-xl border px-4 py-3 text-left ${isSelected ? "bg-[#F1FFFB] border-primary contrast-75" : "bg-[#F1FFFB] border-primary"}`}>
                                 <div className="flex items-center gap-4">
@@ -80,7 +80,7 @@ export default function NutrientLogSelected({
                                     <img src={food.image} alt={food.name} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
                                     <span>{food.name}</span>
                                 </div>
-            
+
                                 <div className="flex items-center gap-2">
                                     <input
                                         type="number"
@@ -97,12 +97,12 @@ export default function NutrientLogSelected({
                 )}
             </div>
 
-                <ActionButton
-                    variant="secondary"
-                    className="font-semibold tracking-wider flex-1 w-full"
-                    rounded="xsm"
-                    onClick={onSave}
-                >Simpan</ActionButton>
+            <ActionButton
+                variant="secondary"
+                className="font-semibold tracking-wider flex-1 w-full"
+                rounded="xsm"
+                onClick={onSave}
+            >Simpan</ActionButton>
 
         </div>
     );

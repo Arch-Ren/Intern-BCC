@@ -121,8 +121,14 @@ export default function ChildProfilePage() {
             router.push("/dashboard/profile")
         } catch (err) {
             console.error("SUBMIT ERROR:", err)
-            alert("Gagal kirim data")
+
+            if (err instanceof Error) {
+                alert(err.message)
+            } else {
+                alert("Gagal kirim data")
+            }
         }
+
     }
 
     const renderStepForm = () => {

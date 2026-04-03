@@ -1,26 +1,30 @@
+import axios from "axios"
+import { api } from "@/lib/axios"
 import type { Children } from "@/types/child"
 
-export async function fetchChildrenService(token: string): Promise<Children[]> {
-    const res = await fetch("/api/user/children", {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-        cache: "no-store",
-    })
+type FetchChildrenResponse = {
+    data?: Children[]
+    message?: string
+}
 
-    const text = await res.text()
-
-    let json
+export async function fetchChildrenService(): Promise<Children[]> {
     try {
-        json = JSON.parse(text)
-    } catch {
-        throw new Error("Response get anak bukan JSON")
-    }
+        const res = await api.get<FetchChildrenResponse | Children[]>("/anak")
 
-    if (!res.ok) {
-        throw new Error(json.message || "Gagal mengambil data anak")
-    }
+        const data = res.data
 
-    return Array.isArray(json.data) ? json.data : []
+        if (Array.isArray(data)) {
+            return data
+        }
+
+        return Array.isArray(data.data) ? data.data : []
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw new Error(
+                error.response?.data?.message || "Gagal mengambil data anak"
+            )
+        }
+
+        throw new Error("Terjadi kesalahan saat mengambil data anak")
+    }
 }

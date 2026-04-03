@@ -7,7 +7,7 @@ import IntakesCard from "../Card/IntakesCard";
 import { dummyIntakes } from "@/data/Intake";
 
 type Props = {
-  onOpenPicker: () => void;
+    onOpenPicker: () => void;
 };
 
 export default function NutrientLogSummary({ onOpenPicker }: Props) {
@@ -15,8 +15,8 @@ export default function NutrientLogSummary({ onOpenPicker }: Props) {
         <>
             <div className="grid w-full grid-cols-[1fr_1.6fr_1fr] gap-4">
                 {dummyIntakes.map((item) => (
-                <IntakesCard key={item.label} {...item} />
-              ))}
+                    <IntakesCard key={item.label} {...item} />
+                ))}
             </div>
 
             <div className="bg-white w-full flex justify-center items-center text-xl text-black p-4 rounded-2xl font-semibold">
@@ -28,7 +28,7 @@ export default function NutrientLogSummary({ onOpenPicker }: Props) {
 
             <div className="bg-white w-full flex flex-col justify-center rounded-2xl border border-black">
                 <p className="text-2xl font-bold text-color4 p-4 border-b border-black w-full text-center mb-20">
-                Pencatatan hari ini
+                    Pencatatan hari ini
                 </p>
 
                 <ActionButton

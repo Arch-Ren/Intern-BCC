@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { ActionButton } from "./ui/Button/Action"
+import { LinkButton } from "./ui/Button/Link"
 
 type ParentProfileCardProps = {
     type: "parent"
@@ -47,14 +48,14 @@ export default function ProfileCard(props: ProfileCardProps) {
             <section className={sectionClass}>
                 <div className="flex flex-col items-center justify-center gap-4 px-6 py-8 text-center h-full">
                     <p className="text-xl font-semibold text-gray-500">Data anak belum tersedia</p>
-                    <ActionButton
+                    <LinkButton
                         variant="primary"
                         rounded="xsm"
                         className={`${buttonMarginClass} font-semibold tracking-wider min-w-[200px]`}
-                        onClick={props.onChangeProfile}
+                        href="/addChild"
                     >
                         Tambah Profil
-                    </ActionButton>
+                    </LinkButton>
                 </div>
             </section>
         )

@@ -84,7 +84,7 @@ export default function ChildProfileList({
             {showAddButton && (
                 <div className={pinAddButtonBottom ? "shrink-0 pt-5" : "mt-8"}>
                     <LinkButton
-                        href="/childProfileForm"
+                        href="/addChild"
                         rounded="xsm"
                         className={pinAddButtonBottom ? "w-full" : ""}
                     >

@@ -1,40 +1,44 @@
-'use client'
+"use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react"
-import { useChildrenStore } from "@/stores/children"
-import type { Children } from "@/types/child"
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useChildrenStore } from "@/stores/children";
+import type { Children } from "@/types/child";
 
 interface SelectedChildContextType {
-    selectedChild: Children | null
-    selectedChildIndex: number
-    setSelectedChildIndex: (index: number) => void
-    children: Children[]
-    isLoading: boolean
+    selectedChild: Children | null;
+    selectedChildIndex: number;
+    setSelectedChildIndex: (index: number) => void;
+    children: Children[];
+    isLoading: boolean;
 }
 
-const SelectedChildContext = createContext<SelectedChildContextType | null>(null)
+const SelectedChildContext = createContext<SelectedChildContextType | null>(null);
 
-export function SelectedChildProvider({ children: reactChildren }: { children: React.ReactNode }) {
-    const [selectedChildIndex, setSelectedChildIndex] = useState(0)
+export function SelectedChildProvider({
+    children: reactChildren,
+}: {
+    children: React.ReactNode;
+}) {
+    const [selectedChildIndex, setSelectedChildIndex] = useState(0);
 
-    const childrenData = useChildrenStore((state) => state.children)
-    const isLoading = useChildrenStore((state) => state.isLoading)
-    const fetchChildren = useChildrenStore((state) => state.fetchChildren)
+    const childrenData = useChildrenStore((state) => state.children);
+    const isLoading = useChildrenStore((state) => state.isLoading);
+    const fetchChildren = useChildrenStore((state) => state.fetchChildren);
 
     useEffect(() => {
-        // fetch ulang saat mount
-        fetchChildren()
-    }, [])
+        fetchChildren();
+    }, [fetchChildren]);
 
-    // Reset selectedChildIndex ke 0 (ganti akun)
     useEffect(() => {
-        setSelectedChildIndex(0)
-    }, [childrenData.length])
+        if (selectedChildIndex >= childrenData.length) {
+            setSelectedChildIndex(0);
+        }
+    }, [childrenData.length, selectedChildIndex]);
 
     const selectedChild = useMemo(
         () => childrenData[selectedChildIndex] ?? null,
         [selectedChildIndex, childrenData]
-    )
+    );
 
     return (
         <SelectedChildContext.Provider
@@ -44,17 +48,19 @@ export function SelectedChildProvider({ children: reactChildren }: { children: R
                 setSelectedChildIndex,
                 children: childrenData,
                 isLoading,
-            }}>
+            }}
+        >
             {reactChildren}
         </SelectedChildContext.Provider>
-    )
+    );
 }
 
 export function useSelectedChild() {
-    const context = useContext(SelectedChildContext)
+    const context = useContext(SelectedChildContext);
+
     if (!context) {
-        throw new Error("useSelectedChild must be used within SelectedChildProvider")
+        throw new Error("useSelectedChild must be used within SelectedChildProvider");
     }
 
-    return context
+    return context;
 }

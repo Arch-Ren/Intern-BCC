@@ -14,13 +14,12 @@ import ProfileCard from "@/components/ProfileCard"
 import ProfileSwitchModal from "@/components/ChildProfileSwitchModal"
 
 import { useSelectedChild } from "@/context/SelectedChild"
+import { useChildrenStore } from "@/stores/children"
 
 import { dummyIntakes } from "@/data/Intake"
 import { dummyEduhub, EduHub } from "@/data/Eduhub"
 import { dummyGrowthRecords } from "@/data/GrowthRecord"
 
-import { calculateAge } from "@/utils/date"
-import { calculateBMI, getBMICategory } from "@/utils/bmi"
 import { getLatestGrowthRecord } from "@/utils/growth"
 
 export default function Dashboard() {
@@ -36,18 +35,15 @@ export default function Dashboard() {
     const featuredArticle = dummyEduhub[0]
     const { selectedChild, selectedChildIndex, setSelectedChildIndex } = useSelectedChild()
 
-    const age = useMemo(() => selectedChild ? calculateAge(selectedChild.tanggal_lahir) : 0, [selectedChild?.tanggal_lahir])
+    const { selectedChild: child } = useSelectedChild();
+    const age = child?.umur
 
     const latestGrowthRecord = useMemo(
         () => selectedChild ? getLatestGrowthRecord(selectedChild.id, dummyGrowthRecords) : null,
         [selectedChild?.id]
     )
 
-    const bmiNumber = latestGrowthRecord
-        ? calculateBMI(latestGrowthRecord.weight, latestGrowthRecord.height)
-        : null
-
-    const bmiLabel = bmiNumber !== null ? getBMICategory(bmiNumber) : "-"
+    const bmiLabel = child?.status
 
     function openEDuhub(article: EduHub) {
         setSelectedArticle(article)
@@ -80,7 +76,6 @@ export default function Dashboard() {
                 <h1 className="text-2xl font-bold">
                     Halo, {user?.name || "User"}
                 </h1>
-                <p className="text-sm text-gray-500">{user?.email || "-"}</p>
             </div>
 
             <div className="grid grid-cols-3 gap-4 items-stretch">
