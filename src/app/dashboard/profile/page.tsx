@@ -17,6 +17,7 @@ import { mapDoctorsResponse } from "@/lib/doctor"
 
 import { useAuthStore } from "@/stores/auth"
 import { useChildrenStore } from "@/stores/children"
+import { useSelectedChild } from "@/context/SelectedChild"
 
 export default function ProfilePage() {
     const router = useRouter()
@@ -28,6 +29,8 @@ export default function ProfilePage() {
 
     const fetchChildren = useChildrenStore((state) => state.fetchChildren)
     const clearChildren = useChildrenStore((state) => state.clearChildren)
+
+    const { selectedChildIndex, setSelectedChildIndex } = useSelectedChild()
 
     const [openEditParent, setOpenEditParent] = useState(false)
     const [doctors, setDoctors] = useState<Doctor[]>([])
@@ -86,7 +89,11 @@ export default function ProfilePage() {
                         onChangeProfile={() => setOpenEditParent(true)}
                     />
 
-                    <ChildProfileSection editMode="info" />
+                    <ChildProfileSection 
+                        editMode="info" 
+                        selectedIndex={selectedChildIndex}
+                        onSelect={setSelectedChildIndex}
+                    />
                 </div>
 
                 <div className="col-span-7 flex min-h-0 flex-col gap-5">
