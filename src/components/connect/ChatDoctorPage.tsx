@@ -3,7 +3,7 @@
 import { Search, Heart, Mic, Paperclip, Camera, Smile, SendHorizonal } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useSearchParams } from "next/navigation"
-import { Doctor, dummyDoctors } from "@/data/Doctor"
+import { Doctor } from "@/lib/doctor"
 
 type ChatListItem = {
     id: number
@@ -132,14 +132,13 @@ export default function ChatDoctorPageContent() {
     const image = searchParams.get("image") ?? ""
 
     const selectedDoctor: Doctor = useMemo(() => {
-        const doctorFromDummy = dummyDoctors.find((doctor) => doctor.id === doctorId)
-
         return {
-            id: doctorId || doctorFromDummy?.id || 0,
-            name: doctorName || doctorFromDummy?.name || "dr. Elena Wijaya, Sp.A",
-            specialist: specialist || doctorFromDummy?.specialist || "Spesialis Anak",
-            image: image || doctorFromDummy?.image || "/images/doctor-7.jpg",
-            schedule: doctorFromDummy?.schedule,
+            id: String(doctorId),
+            name: doctorName || "dr. Elena Wijaya, Sp.A",
+            specialist: specialist || "Spesialis Anak",
+            image: image || "/images/doctor-7.jpg",
+            rating: 4.8,
+            schedule: undefined,
         }
     }, [doctorId, doctorName, specialist, image])
 

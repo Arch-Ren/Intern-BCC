@@ -1,9 +1,10 @@
 "use client"
 
-import { Suspense } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import DoctorScheduleSection from "@/components/Profile/doctorScheduleSection"
 import type { Doctor } from "@/lib/doctor"
+import { useAuthStore } from "@/stores/auth"
 
 type BookingPanelProps = {
     doctors: Doctor[]
@@ -23,17 +24,40 @@ export default function BookingPanel({
     onSelectTime,
 }: BookingPanelProps) {
     const router = useRouter()
+    const token = useAuthStore((state) => state.token)
+    const [doctorDetail, setDoctorDetail] = useState<{ nama: string; spesialis: string } | null>(null)
+
+    useEffect(() => {
+        if (!selectedDoctor?.id || !token) {
+            setDoctorDetail(null)
+            return
+        }
+
+        let isMounted = true
+        fetch(`/api/dokter/${selectedDoctor.id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (isMounted && data) {
+                    setDoctorDetail(data)
+                }
+            })
+            .catch(console.error)
+
+        return () => { isMounted = false }
+    }, [selectedDoctor?.id, token])
 
     const handleBooking = () => {
-        if (!selectedDoctor || !selectedTime) return
+        if (!selectedDoctor) return
 
         const params = new URLSearchParams({
             doctorId: String(selectedDoctor.id),
-            doctorName: selectedDoctor.name,
-            specialist: selectedDoctor.specialist,
+            doctorName: doctorDetail?.nama || selectedDoctor.name,
+            specialist: doctorDetail?.spesialis || selectedDoctor.specialist,
             image: selectedDoctor.image,
             dateLabel: selectedDoctor.schedule?.dateLabel ?? "",
-            timeLabel: selectedTime,
+            timeLabel: selectedTime ?? "",
         })
 
         router.push(`/dashboard/connect/payment?${params.toString()}`)
@@ -76,58 +100,34 @@ export default function BookingPanel({
                             </div>
                         ) : (
                             <div className="flex h-full min-h-0 flex-col gap-4 rounded-2xl bg-white p-4">
-                                <p className="mb-3 shrink-0 font-bold">Pilih jam</p>
+                                <p className="mb-3 shrink-0 font-bold">Detail Dokter</p>
 
                                 <div className="mb-3 flex shrink-0 items-center gap-3">
                                     <img
-                                        src={selectedDoctor.image}
-                                        alt={selectedDoctor.name}
-                                        className="h-12 w-12 rounded-xl object-cover object-top"
+                                        src={selectedDoctor.image || "/images/default-avatar.png"}
+                                        alt={doctorDetail?.nama || selectedDoctor.name}
+                                        className="h-14 w-14 rounded-xl object-cover object-[center_35%]"
+                                        onError={(e) => {
+                                            e.currentTarget.src = "/images/default-avatar.png"
+                                        }}
                                     />
 
                                     <div className="min-w-0">
-                                        <h3 className="line-clamp-1 text-sm font-semibold">
-                                            {selectedDoctor.name}
+                                        <h3 className="line-clamp-1 text-base font-semibold">
+                                            {doctorDetail?.nama || selectedDoctor.name}
                                         </h3>
-                                        <p className="line-clamp-1 text-xs text-slate-500">
-                                            {selectedDoctor.specialist}
-                                        </p>
-                                        <p className="mt-1 text-xs text-emerald-600">
-                                            {selectedDoctor.schedule?.dateLabel}
+                                        <p className="line-clamp-1 text-sm text-slate-500">
+                                            {doctorDetail?.spesialis || selectedDoctor.specialist}
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="min-h-0 flex-1 overflow-y-auto pr-1">
-                                    <div className="grid grid-cols-4 gap-2">
-                                        {selectedDoctor.availableTimes?.map((time) => {
-                                            const isActive = selectedTime === time
-
-                                            return (
-                                                <button
-                                                    key={time}
-                                                    type="button"
-                                                    onClick={() => onSelectTime(time)}
-                                                    className={`rounded-lg px-3 py-2 text-xs font-semibold transition ${isActive
-                                                            ? "bg-sky-600 text-white"
-                                                            : "bg-primary text-white hover:bg-emerald-200"
-                                                        }`}
-                                                >
-                                                    {time}
-                                                </button>
-                                            )
-                                        })}
-                                    </div>
-                                </div>
+                                <div className="min-h-0 flex-1" />
 
                                 <button
                                     type="button"
                                     onClick={handleBooking}
-                                    disabled={!selectedTime}
-                                    className={`mt-3 w-full shrink-0 rounded-xl px-4 py-3 text-sm font-semibold text-white transition ${selectedTime
-                                            ? "bg-slate-800 hover:bg-slate-700"
-                                            : "cursor-not-allowed bg-slate-300"
-                                        }`}
+                                    className="mt-3 w-full shrink-0 rounded-xl bg-slate-800 hover:bg-slate-700 px-4 py-3 text-sm font-semibold text-white transition"
                                 >
                                     PESAN SEKARANG
                                 </button>

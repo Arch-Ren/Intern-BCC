@@ -23,19 +23,14 @@ type DoctorApiResponse = {
     data: DoctorApiItem[]
 }
 
-const fallbackTimes = ["08:00", "09:00", "10:00", "13:00", "14:00", "15:00"]
 
 export function mapDoctorFromApi(item: DoctorApiItem): Doctor {
     return {
         id: item.id,
         name: item.nama,
         specialist: item.spesialis,
-        image: "/images/default-doctor.png",
+        image: "/images/default-avatar.png",
         rating: 4.8,
-        schedule: {
-            dateLabel: "Hari ini",
-        },
-        availableTimes: fallbackTimes,
     }
 }
 

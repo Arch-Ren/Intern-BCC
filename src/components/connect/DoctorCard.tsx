@@ -23,11 +23,12 @@ export default function DoctorCard({
             >
                 <div className="w-full aspect-square overflow-hidden rounded-xl bg-slate-100">
                     <img
-                        src={doctor.image}
+                        src={doctor.image || "/images/default-avatar.png"}
                         alt={doctor.name}
-                        width={286}
-                        style={{ height: "auto" }}
-                        className="w-full object-cover object-top transition hover:scale-[1.02]"
+                        className="w-full h-full object-cover object-[center_35%] transition hover:scale-[1.02]"
+                        onError={(e) => {
+                            e.currentTarget.src = "/images/default-avatar.png"
+                        }}
                     />
                 </div>
 
