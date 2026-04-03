@@ -69,7 +69,7 @@ export default function NutrientLogPicker({
                                     }`}
                             >
                                 <div className="flex items-center gap-4">
-                                    <img src={"/images/default-food.png"} alt={food.nama} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
+                                    <img src={food.image || "/images/default-food.png"} alt={food.nama} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
                                     <span>{food.nama}</span>
                                 </div>
                                 <span className="text-lg font-bold text-white bg-primary px-2 rounded-md">

@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
-import { dummyNotification } from "@/data/Notification"
+import { api } from "@/lib/axios"
 import { useAuthStore } from "@/stores/auth"
 
 const pageNames: Record<string, string> = {
@@ -19,7 +19,7 @@ export default function HomeNavbar() {
     const router = useRouter()
     const currentPage = pageNames[pathname] ?? "Halaman"
 
-    const notifications = dummyNotification
+    const [notifications, setNotifications] = useState<any[]>([])
 
     const user = useAuthStore((state) => state.user)
     const token = useAuthStore((state) => state.token)
@@ -35,6 +35,15 @@ export default function HomeNavbar() {
     useEffect(() => {
         if (token && !user) {
             fetchProfile()
+        }
+
+        if (token) {
+            api.get("/notifikasi")
+                .then((res) => {
+                    const data = res.data?.data || res.data || []
+                    setNotifications(data)
+                })
+                .catch((err) => console.error("Gagal get notifikasi:", err))
         }
     }, [token, user, fetchProfile])
 
@@ -123,24 +132,32 @@ export default function HomeNavbar() {
                             </div>
 
                             <div className="max-h-[420px] space-y-4 overflow-y-auto px-5 py-4">
-                                {notifications.map((item) => (
-                                    <div key={item.id} className="flex gap-3">
-                                        <Image
-                                            src={item.icon}
-                                            alt={item.type}
-                                            width={22}
-                                            height={22}
-                                            className="mt-1 h-[22px] w-[22px]"
-                                        />
+                                {notifications.length > 0 ? (
+                                    notifications.map((item) => (
+                                        <div key={item.id} className="flex gap-3">
+                                            {item.icon && (
+                                                <Image
+                                                    src={item.icon}
+                                                    alt={item.judul || "notifikasi"}
+                                                    width={22}
+                                                    height={22}
+                                                    className="mt-1 h-[22px] w-[22px]"
+                                                />
+                                            )}
 
-                                        <div className="leading-snug">
-                                            <p className={`text-[13px] ${getNotificationTextColor(item.type)}`}>
-                                                <span>{item.message}</span>
-                                            </p>
-                                            <p className="mt-1 text-[11px] text-gray-400">{item.time}</p>
+                                            <div className="leading-snug">
+                                                <p className={`text-[13px] ${getNotificationTextColor(item.type || "")}`}>
+                                                    <span>{item.pesan || item.message}</span>
+                                                </p>
+                                                <p className="mt-1 text-[11px] text-gray-400">
+                                                    {item.time || (item.dibuat_pada ? new Date(item.dibuat_pada).toLocaleString() : "")}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))
+                                ) : (
+                                    <div className="py-4 text-center text-sm text-gray-500">Tidak ada notifikasi</div>
+                                )}
                             </div>
                         </div>
                     )}

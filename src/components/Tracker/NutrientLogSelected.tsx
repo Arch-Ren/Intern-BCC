@@ -63,7 +63,7 @@ export default function NutrientLogSelected({
                                 }}
                                 className={`flex items-center justify-between min-w-[400px] rounded-xl border px-4 py-3 text-left ${isSelected ? "bg-[#F1FFFB] border-primary contrast-75" : "bg-[#F1FFFB] border-primary"}`}>
                                 <div className="flex items-center gap-4">
-                                    <img src={"/images/default-food.png"} alt={food.nama} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
+                                    <img src={food.image || "/images/default-food.png"} alt={food.nama} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
                                     <span>{food.nama}</span>
                                 </div>
                                 <span className="text-lg font-bold text-white bg-primary px-2 aspect-square rounded-md">{isSelected ? "-" : "+"}</span>
@@ -80,7 +80,7 @@ export default function NutrientLogSelected({
                                 className="flex items-center justify-between bg-[#F1FFFB] gap-3 rounded-xl border px-4 py-3 max-w-[600px]"
                             >
                                 <div className="flex items-center gap-4">
-                                    <img src={"/images/default-food.png"} alt={food.nama} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
+                                    <img src={food.image || "/images/default-food.png"} alt={food.nama} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
                                     <span>{food.nama}</span>
                                 </div>
 
