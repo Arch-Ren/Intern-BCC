@@ -11,10 +11,12 @@ import SavedEduhub from "@/components/Profile/savedEduhub"
 import HistorySection from "@/components/Profile/history/HistorySection"
 import DoctorScheduleSection from "@/components/Profile/doctorScheduleSection"
 
-import { useAuthStore } from "@/stores/auth"
-import { useChildrenStore } from "@/stores/children"
+import { api } from "@/lib/axios"
 import type { Doctor } from "@/lib/doctor"
 import { mapDoctorsResponse } from "@/lib/doctor"
+
+import { useAuthStore } from "@/stores/auth"
+import { useChildrenStore } from "@/stores/children"
 
 export default function ProfilePage() {
     const router = useRouter()
@@ -34,7 +36,7 @@ export default function ProfilePage() {
     useEffect(() => {
         if (!token) {
             clearChildren()
-            router.push("/signin")
+            router.replace("/signin")
             return
         }
 
@@ -49,21 +51,11 @@ export default function ProfilePage() {
             try {
                 setIsLoadingDoctors(true)
 
-                const res = await fetch("/api/dokter", {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    cache: "no-store",
+                const res = await api.get("/dokter", {
+                    params: {},
                 })
 
-                const json = await res.json()
-
-                if (!res.ok) {
-                    throw new Error(json?.message || "Gagal mengambil data dokter")
-                }
-
-                setDoctors(mapDoctorsResponse(json))
+                setDoctors(mapDoctorsResponse(res.data))
             } catch (error) {
                 console.error("Gagal load dokter:", error)
             } finally {
@@ -129,7 +121,9 @@ export default function ProfilePage() {
                 parent={{
                     id: user?.id ?? 0,
                     name: user?.name || "Pengguna",
+                    username: user?.username || "",
                     email: user?.email || "",
+                    phone: user?.phone || "",
                     photo: user?.photo || "/images/default-avatar.png",
                 }}
                 onClose={() => setOpenEditParent(false)}

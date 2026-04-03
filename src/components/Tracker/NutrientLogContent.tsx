@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import { dummyFoods, FoodItem } from "@/data/Food";
+import { FoodItem } from "@/data/Food";
 
 import NutrientLogSummary from "./NutrientLogSummary";
 import NutrientLogPicker from "./NutrientLogPicker";
@@ -14,12 +14,13 @@ export default function NutrientLogContent() {
     const [view, setView] = useState<NutrientLogView>("summary");
     const [search, setSearch] = useState("");
     const [selectedFoods, setSelectedFoods] = useState<SelectedFood[]>([]);
+    const [foods] = useState<FoodItem[]>([]);
 
     const filteredFoods = useMemo(() => {
-        return dummyFoods.filter((food) =>
-        food.name.toLowerCase().includes(search.toLowerCase())
+        return foods.filter((food: FoodItem) =>
+        food.nama.toLowerCase().includes(search.toLowerCase())
         );
-    }, [search]);
+    }, [search, foods]);
 
     const handleAddFood = (food: FoodItem) => {
         const exists = selectedFoods.some((item) => item.id === food.id);

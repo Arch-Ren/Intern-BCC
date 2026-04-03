@@ -32,7 +32,7 @@ export async function getFoods(): Promise<FoodItem[]> {
 
     return result.data.map((item) => ({
         id: item.id,
-        name: item.nama,
+        nama: item.nama,
         image: "/images/default-food.png",
         energi: item.energi,
         protein: item.protein,
