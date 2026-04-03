@@ -98,7 +98,7 @@ export default function ForgotPasswordForm() {
 
             <Typography variant="body2" color="text.secondary" mt={2}>
                 Don&apos;t have an account?{' '}
-                <Link href="/register" style={{ color: "#1ca58d", textDecoration: "none", fontWeight: 500 }}>
+                <Link href="/signup" style={{ color: "#1ca58d", textDecoration: "none", fontWeight: 500 }}>
                     Sign Up
                 </Link>
             </Typography>

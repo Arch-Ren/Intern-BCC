@@ -4,7 +4,7 @@ import ResetPasswordForm from "@/components/forgotPassword/ResetPasswordForm";
 
 export default function ResetPasswordPage() {
     return (
-        <AuthShell pageTitle="New password" cardTitle="New Password">
+        <AuthShell pageTitle="" cardTitle="New Password">
             <Suspense fallback={<div>Loading...</div>}>
                 <ResetPasswordForm />
             </Suspense>

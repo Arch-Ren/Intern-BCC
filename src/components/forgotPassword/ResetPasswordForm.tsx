@@ -52,7 +52,7 @@ export default function ResetPasswordForm() {
             setApiMessage(result.message || "Password berhasil diubah");
 
             setTimeout(() => {
-                router.push("/login");
+                router.push("/signin");
             }, 1200);
         } catch (error) {
             setApiError(error instanceof Error ? error.message : "Gagal reset password");
