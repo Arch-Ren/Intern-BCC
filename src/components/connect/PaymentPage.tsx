@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import DoctorCardChat from "../Profile/doctorCardChat"
-import { Doctor, dummyDoctors } from "@/data/Doctor"
 
 type Patient = {
     id: number
@@ -193,8 +192,8 @@ export default function PaymentPageContent() {
 
                                                     <div
                                                         className={`flex h-7 w-7 items-center justify-center rounded-full border-4 ${selectedPayment === method.id
-                                                                ? "border-slate-500"
-                                                                : "border-slate-300"
+                                                            ? "border-slate-500"
+                                                            : "border-slate-300"
                                                             }`}
                                                     >
                                                         {selectedPayment === method.id && (

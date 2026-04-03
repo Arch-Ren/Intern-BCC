@@ -1,20 +1,63 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 import { Button } from "../ui/button";
 import { ActionButton } from "../ui/Button/Action";
 import IntakesCard from "../Card/IntakesCard";
 
-import { dummyIntakes } from "@/data/Intake";
+import { useSelectedChild } from "@/context/SelectedChild";
+import { fetchNutrisiHarian, type NutrisiHarian } from "@/services/nutrisi";
 
 type Props = {
     onOpenPicker: () => void;
 };
 
 export default function NutrientLogSummary({ onOpenPicker }: Props) {
+    const { selectedChild } = useSelectedChild();
+    const [nutrisi, setNutrisi] = useState<NutrisiHarian | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        if (!selectedChild?.id) {
+            setNutrisi(null);
+            return;
+        }
+
+        let cancelled = false;
+        setIsLoading(true);
+
+        fetchNutrisiHarian(selectedChild.id)
+            .then((data) => {
+                if (!cancelled) setNutrisi(data);
+            })
+            .catch((err) => {
+                console.error("Gagal load nutrisi harian:", err);
+                if (!cancelled) setNutrisi(null);
+            })
+            .finally(() => {
+                if (!cancelled) setIsLoading(false);
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [selectedChild?.id]);
+
+    const intakesData = useMemo(
+        () => [
+            { label: "Protein", percentage: nutrisi?.persen_protein ?? 0 },
+            { label: "Kalori", percentage: nutrisi?.persen_kalori ?? 0 },
+            { label: "Lemak", percentage: nutrisi?.persen_lemak ?? 0 },
+        ],
+        [nutrisi]
+    );
+
     return (
         <>
             <div className="grid w-full grid-cols-[1fr_1.6fr_1fr] gap-4">
-                {dummyIntakes.map((item) => (
+                {intakesData.map((item) => (
                     <IntakesCard key={item.label} {...item} />
                 ))}
             </div>
@@ -40,4 +83,4 @@ export default function NutrientLogSummary({ onOpenPicker }: Props) {
             </div>
         </>
     );
-}
+}
