@@ -1,37 +1,74 @@
 'use client'
 
-import { useEffect, useRef, useState } from "react"
-import { dummyCalendarMonths } from "@/data/Calendar"
-import { dummyIntakesHistory } from "@/data/LogHistory"
+import { useEffect, useRef, useState, useMemo } from "react"
 import { LinkButton } from "../ui/Button/Link"
+import { useSelectedChild } from "@/context/SelectedChild"
+import { getFoodLogService } from "@/services/makananLog"
 
 export default function Calendar() {
-    const [selectedMonthIndex, setSelectedMonthIndex] = useState(0)
-    const [isMonthPopupOpen, setIsMonthPopupOpen] = useState(false)
 
-    const popupRef = useRef<HTMLDivElement | null>(null)
+type LogAPI = {
+    id: string | number
+    tanggal?: string
+    created_at?: string
+    waktu?: string
+    jam?: string
+    nama_makanan?: string
+    judul?: string
+    makanan?: string
+    total_kalori?: number
+    kalori?: number
+    [key: string]: any
+}
 
-    const selectedMonth = dummyCalendarMonths[selectedMonthIndex]
+    const { selectedChild } = useSelectedChild()
 
-    const [selectedDay, setSelectedDay] = useState(selectedMonth.days.find((day) => day.isActive)?.day ?? 1)
+    const todayObj = new Date()
+    todayObj.setHours(0,0,0,0)
+    
+    // Generate 7 days (today - 5 to today + 1)
+    const sevenDays = useMemo(() => {
+        const days = []
+        for(let i = -5; i <= 1; i++) {
+            const d = new Date(todayObj)
+            d.setDate(todayObj.getDate() + i)
+            days.push(d)
+        }
+        return days
+    }, [])
+
+    const [allLogs, setAllLogs] = useState<any[]>([])
+    const [selectedDateStr, setSelectedDateStr] = useState(todayObj.toISOString().split('T')[0])
 
     useEffect(() => {
-        const activeDay = selectedMonth.days.find((day) => day.isActive)?.day ?? selectedMonth.days[0]?.day ?? 1
-        setSelectedDay(activeDay)
-    }, [selectedMonthIndex])
-
-    useEffect(() => {
-        function handleClickOutside(e: MouseEvent) {
-            const target = e.target as Node
-
-            if (popupRef.current && !popupRef.current.contains(target)) {
-                setIsMonthPopupOpen(false)
-            }
+        if (!selectedChild?.id) {
+            setAllLogs([])
+            return
         }
 
-        document.addEventListener("mousedown", handleClickOutside)
-        return () => document.removeEventListener("mousedown", handleClickOutside)
-    }, [])
+        let cancelled = false
+
+        getFoodLogService(String(selectedChild.id))
+            .then((resData) => {
+                if (cancelled) return
+                const rawLogs: LogAPI[] = Array.isArray(resData) ? resData : (resData?.data || [])
+                setAllLogs(rawLogs)
+            })
+            .catch((err) => {
+                console.error("Gagal get food log calendar:", err)
+            })
+
+        return () => { cancelled = true }
+    }, [selectedChild?.id])
+
+    const filteredLogs = useMemo(() => {
+        return allLogs.filter((log) => {
+            const logDate = new Date(log.tanggal || log.created_at || new Date().toISOString())
+            logDate.setHours(0,0,0,0)
+            const logDateStr = logDate.toISOString().split('T')[0]
+            return logDateStr === selectedDateStr
+        })
+    }, [allLogs, selectedDateStr])
 
     return (
         <section className="relative rounded-3xl bg-primary shadow-xl w-full h-full overflow-hidden">
@@ -40,40 +77,28 @@ export default function Calendar() {
                     <div className="flex items-center justify-between bg-primary p-4 rounded-2xl">
                         <h3 className="font-medium text-[20px] text-white">MY CALENDAR</h3>
 
-                        <div className="relative" ref={popupRef}>
-                            <button type="button" onClick={() => setIsMonthPopupOpen((prev) => !prev)}
-                                className="flex items-center rounded-xl px-4 py-2 text-[16px] font-medium text-[#8D8D8D] bg-white">
-                                <span>{selectedMonth.month} {selectedMonth.year}</span>
-                                <span className="text-sm">▼</span>
+                        <div className="relative">
+                            <button type="button" 
+                                className="flex items-center rounded-xl px-4 py-2 text-[16px] font-medium text-[#8D8D8D] bg-white cursor-default">
+                                <span>{todayObj.toLocaleDateString("id-ID", { month: "long" })} {todayObj.getFullYear()}</span>
                             </button>
-
-                            {isMonthPopupOpen && (
-                                <div className="absolute right-0 top-[54px] z-50 min-w-[170px] rounded-2xl bg-white p-2 shadow-2xl border border-[#E5E7EB]">
-                                    {dummyCalendarMonths.map((item, index) => (
-                                        <button key={`${item.month}-${item.year}`} type="button"
-                                            onClick={() => {
-                                                setSelectedMonthIndex(index)
-                                                setIsMonthPopupOpen(false)
-                                            }}
-                                            className={`block w-full rounded-xl px-4 py-3 text-left text-[15px] ${index === selectedMonthIndex ? "bg-primary text-white" : "text-[#243B63] hover:bg-[#F3F6FB]"
-                                                }`}>{item.month} {item.year}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
                         </div>
                     </div>
 
                     <div className="grid grid-cols-7 p-2">
-                        {selectedMonth.days.map((item) => {
-                            const isSelected = selectedDay === item.day
+                        {sevenDays.map((dateObjItem) => {
+                            const dateStr = dateObjItem.toISOString().split('T')[0]
+                            const isSelected = dateStr === selectedDateStr
+                            
+                            const dayName = dateObjItem.toLocaleDateString("id-ID", { weekday: "short" })
+                            const dayNum = dateObjItem.getDate()
 
                             return (
-                                <button key={item.day} type="button" onClick={() => setSelectedDay(item.day)}
+                                <button key={dateStr} type="button" onClick={() => setSelectedDateStr(dateStr)}
                                     className={`flex flex-col items-center max-w-full min-h-[70px] justify-center text-[18px] relative ${isSelected ? "bg-primary text-white rounded-xl" : "bg-[#F1FFFB] text-black"
                                         }`}>
-                                    <span className="text-[14px] font-normal">{item.dayName}</span>
-                                    <span className="text-[18px] font-medium">{item.day}</span>
+                                    <span className="text-[14px] font-normal">{dayName}</span>
+                                    <span className="text-[18px] font-medium">{dayNum}</span>
                                 </button>
                             )
                         })}
@@ -81,14 +106,29 @@ export default function Calendar() {
                 </div>
                 <div className="flex flex-1 flex-col overflow-y-auto px-6 py-5">
                     <div className="space-y-3">
-                        {dummyIntakesHistory.map((item) => (
-                            <div key={item.id}
-                                className="flex items-center gap-12 rounded-xl bg-[#F1FFFB] px-8 py-2"
-                            >
-                                <p className="min-w-[110px] text-lg font-medium text-black">{item.time}</p>
-                                <p className="text-lg font-medium text-black">{item.title}</p>
-                            </div>
-                        ))}
+                        {filteredLogs.length > 0 ? (
+                            filteredLogs.map((item, idx) => {
+                                const time = item.waktu || item.jam || item.time || "00.00"
+                                
+                                let titleString = "Log Makanan"
+                                if (Array.isArray(item.makanan)) {
+                                    titleString = item.makanan.map((m: any) => m.nama || m.nama_makanan || "Makanan").join(", ")
+                                } else if (item.judul || item.nama_makanan || typeof item.makanan === "string") {
+                                    titleString = item.judul || item.nama_makanan || item.makanan
+                                }
+
+                                return (
+                                    <div key={item.id || idx}
+                                        className="flex items-center gap-12 rounded-xl bg-[#F1FFFB] px-8 py-2"
+                                    >
+                                        <p className="min-w-[110px] text-lg font-medium text-black">{time}</p>
+                                        <p className="text-lg font-medium text-black line-clamp-1">{titleString}</p>
+                                    </div>
+                                )
+                            })
+                        ) : (
+                            <p className="text-slate-500 text-center py-4">Belum ada riwayat kalender pada hari ini.</p>
+                        )}
                     </div>
                     <div className="mt-auto pt-10">
                         <div className="flex justify-end border-t border-white pt-3">

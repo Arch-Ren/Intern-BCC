@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useRequireAuth } from "@/hooks/useRequireAuth"
 import { useAuthStore } from "@/stores/auth"
 import Image from "next/image"
@@ -14,14 +14,14 @@ import ProfileCard from "@/components/ProfileCard"
 import ProfileSwitchModal from "@/components/ChildProfileSwitchModal"
 
 import { useSelectedChild } from "@/context/SelectedChild"
+import { useChildrenStore } from "@/stores/children"
 
-import { dummyIntakes } from "@/data/Intake"
-import { dummyEduhub, EduHub } from "@/data/Eduhub"
+import { EduHub } from "@/data/Eduhub"
 import { dummyGrowthRecords } from "@/data/GrowthRecord"
+import { fetchInformasi } from "@/services/informasi"
 
-import { calculateAge } from "@/utils/date"
-import { calculateBMI, getBMICategory } from "@/utils/bmi"
 import { getLatestGrowthRecord } from "@/utils/growth"
+import { fetchNutrisiHarian, type NutrisiHarian } from "@/services/nutrisi"
 
 export default function Dashboard() {
     useRequireAuth()
@@ -31,23 +31,75 @@ export default function Dashboard() {
 
     const [selectedArticle, setSelectedArticle] = useState<EduHub | null>(null)
     const [isProfilModalOpen, setIsProfileModalOpen] = useState(false)
+    const [nutrisi, setNutrisi] = useState<NutrisiHarian | null>(null)
+    const [isLoadingNutrisi, setIsLoadingNutrisi] = useState(false)
+    const [featuredArticle, setFeaturedArticle] = useState<EduHub | null>(null)
 
-    const data = dummyIntakes
-    const featuredArticle = dummyEduhub[0]
     const { selectedChild, selectedChildIndex, setSelectedChildIndex } = useSelectedChild()
 
-    const age = useMemo(() => selectedChild ? calculateAge(selectedChild.tanggal_lahir) : 0, [selectedChild?.tanggal_lahir])
+    const age = selectedChild?.umur
 
     const latestGrowthRecord = useMemo(
         () => selectedChild ? getLatestGrowthRecord(selectedChild.id, dummyGrowthRecords) : null,
         [selectedChild?.id]
     )
 
-    const bmiNumber = latestGrowthRecord
-        ? calculateBMI(latestGrowthRecord.weight, latestGrowthRecord.height)
-        : null
+    const bmiLabel = selectedChild?.status
 
-    const bmiLabel = bmiNumber !== null ? getBMICategory(bmiNumber) : "-"
+    // Fetch informasi for Eduhub section
+    useEffect(() => {
+        let cancelled = false;
+        fetchInformasi()
+            .then((data) => {
+                if (!cancelled && data.length > 0) {
+                    const firstItem = data[0];
+                    setFeaturedArticle({
+                        id: Number(firstItem.id) || 0,
+                        title: firstItem.judul,
+                        picture: `/images/eduhub1.jpg`,
+                        summary: firstItem.ringkasan,
+                        content: firstItem.ringkasan,
+                    })
+                }
+            })
+            .catch((err) => {
+                console.error("Gagal load informasi dashboard:", err)
+            });
+
+        return () => { cancelled = true; }
+    }, [])
+
+    // Fetch nutrisi harian when selected child changes
+    useEffect(() => {
+        if (!selectedChild?.id) {
+            setNutrisi(null)
+            return
+        }
+
+        let cancelled = false
+        setIsLoadingNutrisi(true)
+
+        fetchNutrisiHarian(selectedChild.id)
+            .then((data) => {
+                if (!cancelled) setNutrisi(data)
+            })
+            .catch((err) => {
+                console.error("Gagal load nutrisi harian:", err)
+                if (!cancelled) setNutrisi(null)
+            })
+            .finally(() => {
+                if (!cancelled) setIsLoadingNutrisi(false)
+            })
+
+        return () => { cancelled = true }
+    }, [selectedChild?.id])
+
+    // Map API response to IntakesCard data
+    const intakesData = useMemo(() => [
+        { label: "Protein", percentage: nutrisi?.persen_protein ?? 0 },
+        { label: "Kalori", percentage: nutrisi?.persen_kalori ?? 0 },
+        { label: "Lemak", percentage: nutrisi?.persen_lemak ?? 0 },
+    ], [nutrisi])
 
     function openEDuhub(article: EduHub) {
         setSelectedArticle(article)
@@ -80,13 +132,12 @@ export default function Dashboard() {
                 <h1 className="text-2xl font-bold">
                     Halo, {user?.name || "User"}
                 </h1>
-                <p className="text-sm text-gray-500">{user?.email || "-"}</p>
             </div>
 
             <div className="grid grid-cols-3 gap-4 items-stretch">
                 <div className="col-span-2 flex flex-col items-center gap-4 h-full">
                     <section className="grid w-full grid-cols-[1fr_1.6fr_1fr] gap-4">
-                        {data.map((item) => (
+                        {intakesData.map((item) => (
                             <IntakesCard key={item.label} {...item} />
                         ))}
                     </section>

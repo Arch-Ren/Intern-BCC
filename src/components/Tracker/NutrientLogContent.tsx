@@ -9,31 +9,47 @@ import NutrientLogPicker from "./NutrientLogPicker";
 import NutrientLogSelected from "./NutrientLogSelected";
 
 import type { NutrientLogView, SelectedFood } from "./nutrientLog.types";
+import { fetchMakananService, type Makanan } from "@/services/makanan";
+import { addFoodLogService } from "@/services/makananLog";
+import { useSelectedChild } from "@/context/SelectedChild";
 
 export default function NutrientLogContent() {
     const [view, setView] = useState<NutrientLogView>("summary");
     const [selectedFoods, setSelectedFoods] = useState<SelectedFood[]>([]);
-    const [foods, setFoods] = useState<FoodItem[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [foods, setFoods] = useState<Makanan[]>([]);
+    const [isLoadingFoods, setIsLoadingFoods] = useState(false);
 
     useEffect(() => {
-        const fetchFoods = async () => {
-            try {
-                setLoading(true);
-                const data = await getFoods();
-                setFoods(data);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+        let isCancelled = false;
+        setIsLoadingFoods(true);
 
-        fetchFoods();
+        fetchMakananService()
+            .then((data) => {
+                if (!isCancelled) setFoods(data);
+            })
+            .catch((err) => {
+                console.error("Gagal load makanan:", err);
+            })
+            .finally(() => {
+                if (!isCancelled) setIsLoadingFoods(false);
+            });
+
+        return () => {
+            isCancelled = true;
+        };
     }, []);
 
-    const handleFoodsPicked = (foods: SelectedFood[]) => {
-        setSelectedFoods(foods);
+    const filteredFoods = useMemo(() => {
+        return foods.filter((food: Makanan) =>
+            food.nama.toLowerCase().includes(search.toLowerCase())
+        );
+    }, [search, foods]);
+
+    const handleAddFood = (food: Makanan) => {
+        const exists = selectedFoods.some((item) => item.id === food.id);
+        if (exists) return;
+
+        setSelectedFoods((prev) => [...prev, { ...food, gram: 0 }]);
         setView("selected");
     };
 
@@ -54,11 +70,33 @@ export default function NutrientLogContent() {
         );
     };
 
-    const handleFinalSave = () => {
-        console.log("saved:", selectedFoods);
+    const [isSaving, setIsSaving] = useState(false);
+    const { selectedChild } = useSelectedChild();
 
-        setSelectedFoods([]);
-        setView("summary");
+    const handleSave = async () => {
+        if (!selectedChild?.id || selectedFoods.length === 0) return;
+
+        setIsSaving(true);
+        try {
+            const payload = {
+                makanan: selectedFoods.map((food) => ({
+                    makanan_id: food.id,
+                    gram: food.gram,
+                })),
+            };
+
+            await addFoodLogService(selectedChild.id, payload);
+            console.log("saved food log:", payload);
+
+            setSelectedFoods([]);
+            setView("summary");
+            setSearch("");
+        } catch (error) {
+            console.error("Failed to save food log:", error);
+            // Ideally show toast error here
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (

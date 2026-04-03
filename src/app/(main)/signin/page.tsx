@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { ActionButton } from "@/components/ui/Button/Action"
-import { loginService, loginWithGoogleService } from "@/services/auth"
+import { signinService } from "./services/auth"
+import { signinWithGoogleService } from "@/services/authGoogle"
 import { useAuthStore } from "@/stores/auth"
 import { useChildrenStore } from "@/stores/children"
 
@@ -26,10 +26,15 @@ export default function SignIn() {
         e.preventDefault()
         setError("")
 
+        if (!email.trim() || !password) {
+            setError("Email dan password wajib diisi")
+            return
+        }
+
         try {
             setLoading(true)
 
-            const data = await loginService(email.trim(), password)
+            const data = await signinService(email.trim(), password)
 
             clearChildren()
 
@@ -49,7 +54,7 @@ export default function SignIn() {
             if (err instanceof Error) {
                 setError(err.message)
             } else {
-                setError("Terjadi kesalahan")
+                setError("Terjadi kesalahan saat login")
             }
         } finally {
             setLoading(false)
@@ -61,7 +66,7 @@ export default function SignIn() {
 
         try {
             clearChildren()
-            loginWithGoogleService()
+            signinWithGoogleService()
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message)
@@ -72,23 +77,24 @@ export default function SignIn() {
     }
 
     return (
-        <main className="p-12 w-full flex justify-center">
+        <main className="flex w-full justify-center p-12">
             <div className="w-full max-w-[1440px] rounded-3xl bg-primary bg-cover bg-center">
-                <section className="relative z-10 flex justify-between items-center p-[19px]">
+                <section className="relative z-10 flex items-center justify-between p-[19px]">
                     <Image
                         src="/images/signin-pic.webp"
                         alt="gambar sign-in"
                         width={612}
                         height={762}
-                        className="w-1/2 h-auto"
+                        className="h-auto w-1/2"
                         loading="eager"
+                        priority
                     />
 
                     <form
-                        className="flex flex-col items-center justify-center w-full gap-4 text-xl"
+                        className="flex w-full flex-col items-center justify-center gap-4 text-xl"
                         onSubmit={handleLogin}
                     >
-                        <h1 className="text-white text-5xl font-bold mb-12">Sign In</h1>
+                        <h1 className="mb-12 text-5xl font-bold text-white">Sign In</h1>
 
                         <div className="flex flex-col gap-4">
                             <Input
@@ -107,21 +113,20 @@ export default function SignIn() {
 
                             {error && <p className="text-sm text-red-300">{error}</p>}
 
-                            <div className="w-[571px] flex justify-end mb-8">
-                                <Button
-                                    variant="link"
-                                    className="text-white text-right font-semibold text-xl"
-                                    type="button"
+                            <div className="mb-8 flex w-[571px] justify-end">
+                                <Link
+                                    className="text-right text-xl font-semibold text-white hover:underline"
+                                    href="/forgotPassword"
                                 >
                                     Forgot Password?
-                                </Button>
+                                </Link>
                             </div>
                         </div>
 
                         <ActionButton
                             variant="secondary"
                             rounded="lg"
-                            className="text-2xl min-w-[570px] min-h-[78px]"
+                            className="min-h-[78px] min-w-[570px] text-2xl"
                             type="submit"
                             disabled={loading}
                         >
@@ -132,7 +137,7 @@ export default function SignIn() {
                             type="button"
                             onClick={handleGoogleLogin}
                             disabled={loading}
-                            className="bg-white rounded-[40px] w-[570px] h-[78px] flex justify-center items-center gap-4 active:scale-95 active:brightness-75 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex h-[78px] w-[570px] items-center justify-center gap-4 rounded-[40px] bg-white active:scale-95 active:brightness-75 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             <Image
                                 src="/images/google-icon.webp"
@@ -140,12 +145,12 @@ export default function SignIn() {
                                 width={35}
                                 height={35}
                             />
-                            <p className="text-black font-semibold">Login dengan Google</p>
+                            <p className="font-semibold text-black">Login dengan Google</p>
                         </button>
 
-                        <div className="w-[571px] flex justify-center mb-8 text-white gap-2">
+                        <div className="mb-8 flex w-[571px] justify-center gap-2 text-white">
                             <p>Don&apos;t Have An Account?</p>
-                            <Link className="text-right font-bold hover:underline" href="/signup">
+                            <Link className="font-bold hover:underline" href="/signup">
                                 Sign Up
                             </Link>
                         </div>

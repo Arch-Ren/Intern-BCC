@@ -5,12 +5,17 @@ import { useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import { ActionButton } from "../ui/Button/Action";
 
-import { FoodItem } from "@/data/Food";
+import { Makanan } from "@/services/makanan";
 import { SelectedFood } from "@/components/Tracker/nutrientLog.types";
 
 type NutrientLogPickerProps = {
-    foods: FoodItem[];
-    onSave: (selectedFoods: SelectedFood[]) => void;
+    search: string;
+    onSearchChange: (value: string) => void;
+    filteredFoods: Makanan[];
+    selectedFoods: SelectedFood[];
+    onAddFood: (food: Makanan) => void;
+    onRemoveFood: (foodId: string) => void;
+    onSave: () => void;
 };
 
 export default function NutrientLogPicker({
@@ -73,22 +78,16 @@ export default function NutrientLogPicker({
                                 type="button"
                                 onClick={() => {
                                     if (isSelected) {
-                                        handleRemoveFood(food.id);
+                                        onRemoveFood(food.id);
                                     } else {
-                                        handleAddFood(food);
+                                        onAddFood(food);
                                     }
                                 }}
                                 className={`flex items-center justify-between min-w-[400px] rounded-xl border px-4 py-3 text-left ${isSelected ? "" : "bg-[#F1FFFB] border-primary"
                                     }`}
                             >
                                 <div className="flex items-center gap-4">
-                                    <img
-                                        src={food.image}
-                                        alt={food.nama}
-                                        width={50}
-                                        height={50}
-                                        className="rounded-full object-cover aspect-square object-top"
-                                    />
+                                    <img src={"/images/default-food.png"} alt={food.nama} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
                                     <span>{food.nama}</span>
                                 </div>
                                 <span className="text-lg font-bold text-white bg-primary px-2 rounded-md">
