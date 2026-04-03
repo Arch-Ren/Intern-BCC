@@ -1,16 +1,16 @@
 import { Button } from "../ui/button";
 import { ActionButton } from "../ui/Button/Action";
 
-import { dummyFoods, FoodItem } from "@/data/Food";
+import { Makanan } from "@/services/makanan";
 import { SelectedFood } from "@/components/Tracker/nutrientLog.types";
 
 type NutrientLogPickerProps = {
     search: string;
     onSearchChange: (value: string) => void;
-    filteredFoods: FoodItem[];
+    filteredFoods: Makanan[];
     selectedFoods: SelectedFood[];
-    onAddFood: (food: FoodItem) => void;
-    onRemoveFood: (foodId: number) => void;
+    onAddFood: (food: Makanan) => void;
+    onRemoveFood: (foodId: string) => void;
     onSave: () => void;
 };
 
@@ -26,7 +26,7 @@ export default function NutrientLogPicker({
     return (
         <div className="bg-white w-full flex flex-col rounded-2xl border border-black overflow-hidden">
             <p className="text-2xl font-bold text-color4 p-4 border-b border-black w-full text-center">
-            Pencatatan hari ini
+                Pencatatan hari ini
             </p>
 
             <div className="p-4 flex flex-col gap-4">
@@ -54,16 +54,16 @@ export default function NutrientLogPicker({
                                 key={food.id}
                                 type="button"
                                 onClick={() => {
-                                  if (isSelected) {
-                                      onRemoveFood(food.id);
-                                  } else {
-                                      onAddFood(food);
-                                  }
+                                    if (isSelected) {
+                                        onRemoveFood(food.id);
+                                    } else {
+                                        onAddFood(food);
+                                    }
                                 }}
                                 className={`flex items-center justify-between min-w-[400px] rounded-xl border px-4 py-3 text-left ${isSelected ? "" : "bg-[#F1FFFB] border-primary"}`}                            >
                                 <div className="flex items-center gap-4">
-                                    <img src={food.image} alt={food.name} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
-                                    <span>{food.name}</span>
+                                    <img src={"/images/default-food.png"} alt={food.nama} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
+                                    <span>{food.nama}</span>
                                 </div>
                                 <span className="text-lg font-bold text-white bg-primary px-2 rounded-md">+</span>
                             </button>

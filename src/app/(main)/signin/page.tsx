@@ -1,79 +1,162 @@
-'use client'
+"use client"
 
-import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { ActionButton } from "@/components/ui/Button/Action"
-import { User } from "@/data/User"
+import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { ActionButton } from "@/components/ui/Button/Action"
+import { signinService } from "./services/auth"
+import { signinWithGoogleService } from "@/services/authGoogle"
+import { useAuthStore } from "@/stores/auth"
+import { useChildrenStore } from "@/stores/children"
 
 export default function SignIn() {
+    const router = useRouter()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const router = useRouter()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
 
-    const handleLogin =(e: React.FormEvent<HTMLFormElement>) => {
+    const setAuth = useAuthStore((state) => state.setAuth)
+    const clearChildren = useChildrenStore((state) => state.clearChildren)
+
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setError("")
 
-        if (email === User.email && password == User.password) {
-            localStorage.setItem("user", JSON.stringify({
-                name: User.name,
-                photo: User.photo,
-                email: User.email,
-            }))
+        if (!email.trim() || !password) {
+            setError("Email dan password wajib diisi")
+            return
+        }
+
+        try {
+            setLoading(true)
+
+            const data = await signinService(email.trim(), password)
+
+            clearChildren()
+
+            setAuth({
+                user: {
+                    id: (data.user as any)?.id,
+                    name: (data.user as any)?.name || (data.user as any)?.nama || "User",
+                    email: data.user?.email || email.trim(),
+                    photo: data.user?.photo,
+                    gender: (data.user as any)?.gender,
+                },
+                token: data.token,
+            })
+
             router.push("/dashboard")
-        } else if (email === User.email && password != User.password){
-            alert("Password salah")
-        } else {
-            alert("Silahkan isi Email dan password anda")
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message)
+            } else {
+                setError("Terjadi kesalahan saat login")
+            }
+        } finally {
+            setLoading(false)
         }
     }
 
-    return(
-            <main className="p-12 w-full flex justify-center">
-            
-                <div className="w-full max-w-[1440px] rounded-3xl bg-primary bg-cover bg-center">
-                    <section className="relative z-10 flex justify-between items-center p-[19px]">
-                        <Image
-                        src="/images/signin-pic.webp" alt="gambar sign-in"
+    const handleGoogleLogin = () => {
+        setError("")
+
+        try {
+            clearChildren()
+            signinWithGoogleService()
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message)
+            } else {
+                setError("Google login gagal")
+            }
+        }
+    }
+
+    return (
+        <main className="flex w-full justify-center p-12">
+            <div className="w-full max-w-[1440px] rounded-3xl bg-primary bg-cover bg-center">
+                <section className="relative z-10 flex items-center justify-between p-[19px]">
+                    <Image
+                        src="/images/signin-pic.webp"
+                        alt="gambar sign-in"
                         width={612}
                         height={762}
-                        className="w-1/2 h-auto"
-                        />
-                
-                        <form className="flex flex-col items-center justify-center w-full gap-4 text-xl" onSubmit={handleLogin}>
-                            <h1 className="text-white text-5xl font-bold mb-12">Sign In</h1>
-                            <div className="flex flex-col gap-4 ">
-                                <Input placeholder="Email" type="email" onChange={(e) =>setEmail(e.target.value)} />
+                        className="h-auto w-1/2"
+                        loading="eager"
+                        priority
+                    />
 
-                                <Input placeholder="Password" type="password" onChange={(e) =>setPassword(e.target.value)} />
+                    <form
+                        className="flex w-full flex-col items-center justify-center gap-4 text-xl"
+                        onSubmit={handleLogin}
+                    >
+                        <h1 className="mb-12 text-5xl font-bold text-white">Sign In</h1>
 
-                                <div className="w-[571px] flex justify-end mb-8">
-                                    <Button variant="link" className="text-white text-right font-semibold text-xl" type="button">Forgot Password?</Button>
-                                </div>
+                        <div className="flex flex-col gap-4">
+                            <Input
+                                placeholder="Email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+
+                            <Input
+                                placeholder="Password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+
+                            {error && <p className="text-sm text-red-300">{error}</p>}
+
+                            <div className="mb-8 flex w-[571px] justify-end">
+                                <Link
+                                    className="text-right text-xl font-semibold text-white hover:underline"
+                                    href="/forgotPassword"
+                                >
+                                    Forgot Password?
+                                </Link>
                             </div>
+                        </div>
 
-                            <ActionButton variant="secondary" rounded="lg" className="text-2xl min-w-[570px] min-h-[78px]" type="submit">Sign In</ActionButton>
-                            <button className="bg-white rounded-[40px] text-white text-center w-[570px] h-[78px] flex justify-center items-center gap-4 active:scale-95 active:brightness-75" type="button">
-                                <Image 
-                                src="/images/google-icon.webp" alt="google-icon"
+                        <ActionButton
+                            variant="secondary"
+                            rounded="lg"
+                            className="min-h-[78px] min-w-[570px] text-2xl"
+                            type="submit"
+                            disabled={loading}
+                        >
+                            {loading ? "Loading..." : "Sign In"}
+                        </ActionButton>
+
+                        <button
+                            type="button"
+                            onClick={handleGoogleLogin}
+                            disabled={loading}
+                            className="flex h-[78px] w-[570px] items-center justify-center gap-4 rounded-[40px] bg-white active:scale-95 active:brightness-75 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                            <Image
+                                src="/images/google-icon.webp"
+                                alt="google-icon"
                                 width={35}
                                 height={35}
-                                />
-                                <p className="text-black font-semibold">Sign In With Google</p>
-                            </button>
+                            />
+                            <p className="font-semibold text-black">Login dengan Google</p>
+                        </button>
 
-                            <div className="w-[571px] flex justify-center mb-8 text-white gap-2">
-                                <p>Don't Have An Account? </p>
-                                <Link className="text-right font-bold hover:underline" href="/signup">Sign Up</Link>
-                            </div>
-                        </form>
-                    </section>
-                </div>
-
-            </main>
+                        <div className="mb-8 flex w-[571px] justify-center gap-2 text-white">
+                            <p>Don&apos;t Have An Account?</p>
+                            <Link className="font-bold hover:underline" href="/signup">
+                                Sign Up
+                            </Link>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </main>
     )
 }

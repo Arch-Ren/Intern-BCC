@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { dummyChildren } from "@/data/Children"
+import { useChildrenStore } from "@/stores/children"
 import EditChildProfileModal from "../EditChildProfileModal"
 import ChildInfoModal from "../ChildInfoModal"
 import ChildProfileList from "../ChildProfileList"
@@ -12,11 +12,24 @@ interface ChildProfileSectionProps {
     editMode?: "direct" | "info"
 }
 
+type ChildGender = "Laki-Laki" | "Perempuan"
+
+function normalizeGender(gender?: string): ChildGender {
+    const value = gender?.toLowerCase()
+
+    if (value === "laki-laki" || value === "laki laki" || value === "male") {
+        return "Laki-Laki"
+    }
+
+    return "Perempuan"
+}
+
 export default function ChildProfileSection({
     selectedIndex,
     onSelect,
     editMode = "direct",
 }: ChildProfileSectionProps) {
+    const children = useChildrenStore((state) => state.children)
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
     const [isInfoOpen, setIsInfoOpen] = useState(false)
     const [isEditOpen, setIsEditOpen] = useState(false)
@@ -32,17 +45,22 @@ export default function ChildProfileSection({
         setIsEditOpen(true)
     }
 
-    const activeChild =
-        activeIndex !== null
-            ? {
-                ...dummyChildren[activeIndex],
-                age: 7,
-                height: 114,
-                weight: 24,
-                bloodType: "AB",
-                allergy: "-",
-            }
-            : null
+    const selectedChild = activeIndex !== null ? children[activeIndex] : null
+
+    const activeChild = selectedChild
+        ? {
+            id: selectedChild.id,
+            name: selectedChild.nama,
+            photo: (selectedChild as any).photo || "/images/default-avatar.png",
+            birthDate: selectedChild.tanggal_lahir,
+            gender: normalizeGender(selectedChild.gender),
+            age: selectedChild.umur ?? 0,
+            height: selectedChild.tinggi ?? 0,
+            weight: selectedChild.berat_badan ?? 0,
+            bloodType: selectedChild.golongan_darah ?? "-",
+            allergy: selectedChild.alergi ?? "-",
+        }
+        : null
 
     return (
         <>

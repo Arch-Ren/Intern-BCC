@@ -1,27 +1,50 @@
 'use client'
 
-import { useMemo, useState } from "react";
-
-import { dummyFoods, FoodItem } from "@/data/Food";
+import { useEffect, useMemo, useState } from "react";
 
 import NutrientLogSummary from "./NutrientLogSummary";
 import NutrientLogPicker from "./NutrientLogPicker";
 import NutrientLogSelected from "./NutrientLogSelected";
 
 import type { NutrientLogView, SelectedFood } from "./nutrientLog.types";
+import { fetchMakananService, type Makanan } from "@/services/makanan";
+import { addFoodLogService } from "@/services/makananLog";
+import { useSelectedChild } from "@/context/SelectedChild";
 
 export default function NutrientLogContent() {
     const [view, setView] = useState<NutrientLogView>("summary");
     const [search, setSearch] = useState("");
     const [selectedFoods, setSelectedFoods] = useState<SelectedFood[]>([]);
+    const [foods, setFoods] = useState<Makanan[]>([]);
+    const [isLoadingFoods, setIsLoadingFoods] = useState(false);
+
+    useEffect(() => {
+        let isCancelled = false;
+        setIsLoadingFoods(true);
+
+        fetchMakananService()
+            .then((data) => {
+                if (!isCancelled) setFoods(data);
+            })
+            .catch((err) => {
+                console.error("Gagal load makanan:", err);
+            })
+            .finally(() => {
+                if (!isCancelled) setIsLoadingFoods(false);
+            });
+
+        return () => {
+            isCancelled = true;
+        };
+    }, []);
 
     const filteredFoods = useMemo(() => {
-        return dummyFoods.filter((food) =>
-        food.name.toLowerCase().includes(search.toLowerCase())
+        return foods.filter((food: Makanan) =>
+            food.nama.toLowerCase().includes(search.toLowerCase())
         );
-    }, [search]);
+    }, [search, foods]);
 
-    const handleAddFood = (food: FoodItem) => {
+    const handleAddFood = (food: Makanan) => {
         const exists = selectedFoods.some((item) => item.id === food.id);
         if (exists) return;
 
@@ -29,7 +52,7 @@ export default function NutrientLogContent() {
         setView("selected");
     };
 
-    const handleRemoveFood = (foodId: number) => {
+    const handleRemoveFood = (foodId: string) => {
         const updated = selectedFoods.filter((item) => item.id !== foodId);
         setSelectedFoods(updated);
 
@@ -38,16 +61,41 @@ export default function NutrientLogContent() {
         }
     };
 
-    const handleGramChange = (foodId: number, value: number) => {
-        setSelectedFoods((prev) =>prev.map((item) => item.id === foodId ? { ...item, gram: value } : item));
+    const handleGramChange = (foodId: string, value: number) => {
+        setSelectedFoods((prev) =>
+            prev.map((item) =>
+                item.id === foodId ? { ...item, gram: value } : item
+            )
+        );
     };
 
-    const handleSave = () => {
-        console.log("saved:", selectedFoods);
+    const [isSaving, setIsSaving] = useState(false);
+    const { selectedChild } = useSelectedChild();
 
-        setSelectedFoods([]);
-        setView("summary");
-        setSearch("");
+    const handleSave = async () => {
+        if (!selectedChild?.id || selectedFoods.length === 0) return;
+
+        setIsSaving(true);
+        try {
+            const payload = {
+                makanan: selectedFoods.map((food) => ({
+                    makanan_id: food.id,
+                    gram: food.gram,
+                })),
+            };
+
+            await addFoodLogService(selectedChild.id, payload);
+            console.log("saved food log:", payload);
+
+            setSelectedFoods([]);
+            setView("summary");
+            setSearch("");
+        } catch (error) {
+            console.error("Failed to save food log:", error);
+            // Ideally show toast error here
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (

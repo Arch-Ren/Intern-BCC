@@ -3,10 +3,12 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
+import { Providers } from "./provider";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
-const poppins = Poppins ({
+const poppins = Poppins({
   weight: '400',
   subsets: ['latin'],
 })
@@ -32,9 +34,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className = {cn(poppins.className, "font-sans", inter.variable)}>
+    <html lang="en" className={cn(poppins.className, "font-sans", inter.variable)}>
       <body>
-        {children}
+        <AppRouterCacheProvider>
+          <Providers>
+            {children}
+          </Providers>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

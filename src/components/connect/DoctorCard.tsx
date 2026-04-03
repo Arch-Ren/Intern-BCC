@@ -1,4 +1,4 @@
-import { Doctor } from "@/data/Doctor"
+import type { Doctor } from "@/lib/doctor"
 
 type DoctorCardProps = {
     doctor: Doctor
@@ -6,7 +6,11 @@ type DoctorCardProps = {
     onSelect: (doctor: Doctor) => void
 }
 
-export default function DoctorCard({ doctor, active = false, onSelect }: DoctorCardProps) {
+export default function DoctorCard({
+    doctor,
+    active = false,
+    onSelect,
+}: DoctorCardProps) {
     return (
         <div
             className={`rounded-2xl border bg-white p-3 shadow-sm transition hover:shadow-md ${active ? "border-emerald-400 ring-2 ring-emerald-100" : "border-slate-200"
@@ -19,10 +23,12 @@ export default function DoctorCard({ doctor, active = false, onSelect }: DoctorC
             >
                 <div className="w-full aspect-square overflow-hidden rounded-xl bg-slate-100">
                     <img
-                        src={doctor.image}
+                        src={doctor.image || "/images/default-avatar.png"}
                         alt={doctor.name}
-                        width={286}
-                        className="w-full object-cover object-top transition hover:scale-[1.02]"
+                        className="w-full h-full object-cover object-[center_35%] transition hover:scale-[1.02]"
+                        onError={(e) => {
+                            e.currentTarget.src = "/images/default-avatar.png"
+                        }}
                     />
                 </div>
 
@@ -30,9 +36,7 @@ export default function DoctorCard({ doctor, active = false, onSelect }: DoctorC
                     <h3 className="line-clamp-1 text-xl font-bold text-slate-800">
                         {doctor.name}
                     </h3>
-                    <p className="line-clamp-1 text-sm">
-                        {doctor.specialist}
-                    </p>
+                    <p className="line-clamp-1 text-sm">{doctor.specialist}</p>
 
                     <div className="flex items-center gap-1 text-xs text-amber-500">
                         <span>★</span>

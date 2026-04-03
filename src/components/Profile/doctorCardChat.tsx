@@ -3,7 +3,7 @@
 import { CalendarDays, Clock3, MessageCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import clsx from "clsx"
-import { Doctor } from "@/data/Doctor"
+import { Doctor } from "@/lib/doctor"
 
 type DoctorCardVariant = "schedule" | "payment" | "history"
 
@@ -107,9 +107,12 @@ export default function DoctorCard({
             <div className={styles.wrapperGap}>
                 <div className={clsx(styles.imageWrapper, imageClassName)}>
                     <img
-                        src={doctor.image}
+                        src={doctor.image || "/images/default-avatar.png"}
                         alt={doctor.name}
                         className={styles.image}
+                        onError={(e) => {
+                            e.currentTarget.src = "/images/default-avatar.png"
+                        }}
                     />
                 </div>
 

@@ -4,21 +4,23 @@ import { LinkButton } from "@/components/ui/Button/Link"
 import Image from "next/image"
 
 type EduhubProps = {
-    article: EduHub
+    article: EduHub | null
     onReadMore: (article: EduHub) => void
 }
 
 export default function EduhubSection({ article, onReadMore, }: EduhubProps) {
     return (
         <section className="w-full">
-                    <div className="mb-4 flex justify-between items-center">
-                        <h2 className="text-2xl font-semibold">Baca EduHub</h2>
-                        <LinkButton href="/dashboard/eduhub" variant="primary" rounded="xsm" className="w-[170px] max-h-[40px]">Lihat Semua</LinkButton>
-                    </div>
+            <div className="mb-4 flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Baca EduHub</h2>
+                <LinkButton href="/dashboard/eduhub" variant="primary" rounded="xsm" className="w-[170px] max-h-[40px]">Lihat Semua</LinkButton>
+            </div>
 
-                    <div className="flex w-full gap-5 rounded-3xl bg-white p-4 shadow-md">
+            <div className="flex w-full gap-5 rounded-3xl bg-white p-4 shadow-md min-h-[200px]">
+                {article ? (
+                    <>
                         <div className="max-w-[309px] shrink-0">
-                            <Image 
+                            <Image
                                 src={article.picture} alt={article.title}
                                 width={0}
                                 height={0}
@@ -32,7 +34,7 @@ export default function EduhubSection({ article, onReadMore, }: EduhubProps) {
                                 <h3 className="mb-4 text-2xl font-bold leading-snug text-[#243B63]">
                                     {article.title}
                                 </h3>
-                                <p className="max-w-[750px] text-[18px] leading-8 text-[#3E4C63]">
+                                <p className="max-w-[750px] text-[18px] leading-8 text-[#3E4C63] line-clamp-2">
                                     {article.summary}
                                 </p>
                             </div>
@@ -43,7 +45,13 @@ export default function EduhubSection({ article, onReadMore, }: EduhubProps) {
                                 </ActionButton>
                             </div>
                         </div>
+                    </>
+                ) : (
+                    <div className="flex w-full items-center justify-center">
+                        <p className="text-slate-500">Memuat artikel eduHub...</p>
                     </div>
-                </section>
+                )}
+            </div>
+        </section>
     )
 }

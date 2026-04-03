@@ -1,17 +1,17 @@
 import { Button } from "../ui/button";
 import { ActionButton } from "../ui/Button/Action";
 
-import type { FoodItem } from "@/data/Food";
+import type { Makanan } from "@/services/makanan";
 import type { SelectedFood } from "./nutrientLog.types";
 
 type NutrientLogSelectedProps = {
     search: string;
     onSearchChange: (value: string) => void;
-    filteredFoods: FoodItem[];
+    filteredFoods: Makanan[];
     selectedFoods: SelectedFood[];
-    onAddFood: (food: FoodItem) => void;
-    onRemoveFood: (foodId: number) => void;
-    onGramChange: (foodId: number, value: number) => void;
+    onAddFood: (food: Makanan) => void;
+    onRemoveFood: (foodId: string) => void;
+    onGramChange: (foodId: string, value: number) => void;
     onBackToPicker: () => void;
     onSave: () => void;
 };
@@ -53,16 +53,16 @@ export default function NutrientLogSelected({
                                 key={food.id}
                                 type="button"
                                 onClick={() => {
-                                   if (isSelected) {
-                                      onRemoveFood(food.id);
-                                  } else {
-                                      onAddFood(food);
-                                  }
+                                    if (isSelected) {
+                                        onRemoveFood(food.id);
+                                    } else {
+                                        onAddFood(food);
+                                    }
                                 }}
                                 className={`flex items-center justify-between min-w-[400px] rounded-xl border px-4 py-3 text-left ${isSelected ? "bg-[#F1FFFB] border-primary contrast-75" : "bg-[#F1FFFB] border-primary"}`}>
                                 <div className="flex items-center gap-4">
-                                    <img src={food.image} alt={food.name} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
-                                    <span>{food.name}</span>
+                                    <img src={"/images/default-food.png"} alt={food.nama} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
+                                    <span>{food.nama}</span>
                                 </div>
                                 <span className="text-lg font-bold text-white bg-primary px-2 aspect-square rounded-md">{isSelected ? "-" : "+"}</span>
                             </button>
@@ -77,10 +77,10 @@ export default function NutrientLogSelected({
                                 key={food.id}
                                 className="flex items-center justify-between bg-[#F1FFFB] gap-3 rounded-xl border px-4 py-3 max-w-[600px]">
                                 <div className="flex items-center gap-4">
-                                    <img src={food.image} alt={food.name} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
-                                    <span>{food.name}</span>
+                                    <img src={"/images/default-food.png"} alt={food.nama} width={50} height={50} className="rounded-full object-cover aspect-square object-top" />
+                                    <span>{food.nama}</span>
                                 </div>
-            
+
                                 <div className="flex items-center gap-2">
                                     <input
                                         type="number"
@@ -97,12 +97,12 @@ export default function NutrientLogSelected({
                 )}
             </div>
 
-                <ActionButton
-                    variant="secondary"
-                    className="font-semibold tracking-wider flex-1 w-full"
-                    rounded="xsm"
-                    onClick={onSave}
-                >Simpan</ActionButton>
+            <ActionButton
+                variant="secondary"
+                className="font-semibold tracking-wider flex-1 w-full"
+                rounded="xsm"
+                onClick={onSave}
+            >Simpan</ActionButton>
 
         </div>
     );

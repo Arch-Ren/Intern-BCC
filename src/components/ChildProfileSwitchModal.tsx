@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { dummyChildren } from "@/data/Children"
+import { useChildrenStore } from "@/stores/children"
 import EditChildProfileModal from "./EditChildProfileModal"
 import ChildProfileList from "./ChildProfileList"
 
@@ -18,6 +18,7 @@ export default function ProfileSwitchModal({
   onClose,
   onSelect,
 }: SwitchChildrenModalProps) {
+  const children = useChildrenStore((state) => state.children)
   const [editIndex, setEditIndex] = useState<number | null>(null)
 
   if (!isOpen) return null
@@ -54,7 +55,21 @@ export default function ProfileSwitchModal({
 
       <EditChildProfileModal
         isOpen={editIndex !== null}
-        child={editIndex !== null ? dummyChildren[editIndex] : null}
+        child={editIndex !== null && children[editIndex] ? {
+          id: children[editIndex].id,
+          name: children[editIndex].nama,
+          photo: (children[editIndex] as any).photo || "/images/default-avatar.png",
+          birthDate: children[editIndex].tanggal_lahir,
+          gender: children[editIndex].gender,
+          bloodType: children[editIndex].golongan_darah,
+          allergy: children[editIndex].alergi,
+          anakKe: children[editIndex].anak_ke,
+          riwayatPenyakit: children[editIndex].riwayat_penyakit,
+          tinggi: children[editIndex].tinggi,
+          beratBadan: children[editIndex].berat_badan,
+          lingkarKepala: children[editIndex].lingkar_kepala,
+          lingkarLengan: children[editIndex].lingkar_lengan,
+        } : null}
         onClose={() => setEditIndex(null)}
       />
     </>
