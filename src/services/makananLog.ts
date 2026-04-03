@@ -25,3 +25,19 @@ export async function addFoodLogService(
         throw new Error("Terjadi kesalahan saat menyimpan log makanan");
     }
 }
+
+export async function getFoodLogService(childId: string) {
+    try {
+        const res = await api.get(`/anak/${childId}/log`);
+        return res.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error("GET FOOD LOG STATUS:", error.response?.status);
+            throw new Error(
+                error.response?.data?.message || "Gagal mengambil log makanan"
+            );
+        }
+        throw new Error("Terjadi kesalahan saat mengambil log makanan");
+    }
+}
+
