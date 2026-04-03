@@ -1,9 +1,9 @@
 "use client"
 
-import { Doctor } from "@/data/Doctor"
-import DoctorScheduleSection from "@/components/Profile/doctorScheduleSection"
-import { useRouter } from "next/navigation"
 import { Suspense } from "react"
+import { useRouter } from "next/navigation"
+import DoctorScheduleSection from "@/components/Profile/doctorScheduleSection"
+import type { Doctor } from "@/lib/doctor"
 
 type BookingPanelProps = {
     doctors: Doctor[]
@@ -47,12 +47,10 @@ export default function BookingPanel({
                 </h2>
 
                 <div className="grid min-h-0 flex-1 grid-rows-[1.2fr_auto_2.2fr] gap-4">
-                    {/* TOP SECTION */}
                     <div className="min-h-0 overflow-y-auto rounded-2xl p-1">
                         <DoctorScheduleSection doctors={doctors.slice(0, 2)} />
                     </div>
 
-                    {/* DIVIDER */}
                     <div className="shrink-0 px-1">
                         <div className="h-px w-full bg-white/50" />
                         <div className="mt-2 text-center text-xs text-white/90">
@@ -60,10 +58,9 @@ export default function BookingPanel({
                         </div>
                     </div>
 
-                    {/* BOTTOM SECTION */}
                     <div className="min-h-0 text-black">
                         {!selectedDoctor ? (
-                            <div className="flex min-h-0 flex-col bg-white p-4 rounded-2xl">
+                            <div className="flex min-h-0 flex-col rounded-2xl bg-white p-4">
                                 <p className="mb-3 shrink-0 font-bold">
                                     Pilih Dokter atau Konsultan
                                 </p>
@@ -78,10 +75,8 @@ export default function BookingPanel({
                                 </button>
                             </div>
                         ) : (
-                            <div className="flex gap-4 min-h-0 h-full flex-col bg-white p-4 rounded-2xl">
-                                <p className="mb-3 shrink-0 font-bold">
-                                    Pilih jam
-                                </p>
+                            <div className="flex h-full min-h-0 flex-col gap-4 rounded-2xl bg-white p-4">
+                                <p className="mb-3 shrink-0 font-bold">Pilih jam</p>
 
                                 <div className="mb-3 flex shrink-0 items-center gap-3">
                                     <img
@@ -114,8 +109,8 @@ export default function BookingPanel({
                                                     type="button"
                                                     onClick={() => onSelectTime(time)}
                                                     className={`rounded-lg px-3 py-2 text-xs font-semibold transition ${isActive
-                                                        ? "bg-sky-600 text-white"
-                                                        : "bg-primary text-white hover:bg-emerald-200"
+                                                            ? "bg-sky-600 text-white"
+                                                            : "bg-primary text-white hover:bg-emerald-200"
                                                         }`}
                                                 >
                                                     {time}
@@ -130,8 +125,8 @@ export default function BookingPanel({
                                     onClick={handleBooking}
                                     disabled={!selectedTime}
                                     className={`mt-3 w-full shrink-0 rounded-xl px-4 py-3 text-sm font-semibold text-white transition ${selectedTime
-                                        ? "bg-slate-800 hover:bg-slate-700"
-                                        : "bg-slate-300 cursor-not-allowed"
+                                            ? "bg-slate-800 hover:bg-slate-700"
+                                            : "cursor-not-allowed bg-slate-300"
                                         }`}
                                 >
                                     PESAN SEKARANG

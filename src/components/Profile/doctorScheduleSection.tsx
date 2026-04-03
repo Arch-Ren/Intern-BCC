@@ -1,4 +1,4 @@
-import { Doctor } from "@/data/Doctor"
+import type { Doctor } from "@/lib/doctor"
 import DoctorCard from "./doctorCardChat"
 
 type DoctorScheduleSectionProps = {
